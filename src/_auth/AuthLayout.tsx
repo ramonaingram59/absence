@@ -14,11 +14,13 @@ const AuthLayout = () => {
             <section className='flex flex-1 justify-center items-center flex-col py-10'>
               <Outlet />
             </section>
-
-            <img
-              src='/assets/image/side-img.webp'
-              className='hidden xl:block h-screen w-1/2 object-cover bg-no-repeat'
-            />
+            <div className='p-72 hidden xl:block h-screen w-1/2 object-fill bg-no-repeat shadow-2xl text-center'>
+              <img
+                src='/assets/image/side-img.gif'
+                className=''
+              />
+              <h2 className={`text-4xl italic font-semibold text-primary`}>IFCAbsence</h2>
+            </div>
           </>
       }
     </>

@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import {
-  Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { SignupValidation } from "@/lib/validation"
@@ -14,6 +14,7 @@ import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/querie
 import { useUserContext } from "@/context/AuthContext"
 import { checkRegisteredUser } from "@/lib/appwrite/api"
 import { ToastAction } from "@/components/ui/toast"
+import { cn } from "@/lib/utils"
 
 
 
@@ -85,13 +86,16 @@ const SignupForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/image/logo.webp" alt="logo" className="w-8 h-8" />
+        <div className="flex flex-row gap-2">
+          <img src="/assets/image/side-img.gif" alt="logo" className="w-8 h-8" />
+          <h2 className="text-2xl italic font-semibold text-primary">IFCAbsence</h2>
+        </div>
 
-        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">Create a new account</h2>
-        <p className="text-light-3 small-medium md:base-regular mt-2">
-          To use Picrizy, please enter your details</p>
+        <h2 className="text-xl font-semibold md:h2-bold pt-5 sm:pt-12">Create a new account</h2>
+        <p className="text-light-3 text-xs md:base-regular mt-2">
+          To use IFCABsence, please enter your details</p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full mt-4">
           <FormField
             control={control}
             name="name"
@@ -101,9 +105,6 @@ const SignupForm = () => {
                 <FormControl>
                   <Input type="text" className="shad-input" {...field} />
                 </FormControl>
-                <FormDescription className="text-gray-500">
-                  This is your public display name.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -162,11 +163,17 @@ const SignupForm = () => {
 
           <p className="text-small-regular text-light-2 text-center mt-2">
             Already have an account?
-            <Link to={"/signin"} className="text-primary-500 text-small-semibold ml-1">
+            <Link to={"/signin"} className={cn(buttonVariants({ variant: "link" }), "text-primary-500 text-small-semibold ml-1")}>
               Log in
             </Link>
           </p>
         </form>
+        <p className="text-xs text-muted-foreground text-center mt-2 px-12">
+          By clicking continue, you agree to our{" "}
+          <span className="underline">Terms of Service</span>
+          {" "}and{" "}
+          <span className="underline">Privacy Policy.</span>
+        </p>
       </div>
 
     </Form>

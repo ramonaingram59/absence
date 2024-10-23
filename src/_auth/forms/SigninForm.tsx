@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useToast } from "@/components/ui/use-toast"
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
+import { cn } from "@/lib/utils"
 
 
 
@@ -56,11 +57,15 @@ const SigninForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/image/logo.webp" alt="logo" className="w-8 h-8" />
+        <div className="flex flex-row gap-2">
+          <img src="/assets/image/side-img.gif" alt="logo" className="w-8 h-8" />
+          <h2 className="text-2xl italic font-semibold text-primary">IFCAbsence</h2>
+        </div>
 
-        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">Log in to your account</h2>
-        <p className="text-light-3 small-medium md:base-regular mt-2">
-          Welcome back! please enter your details</p>
+        <h2 className="text-xl font-semibold md:h2-bold pt-5 sm:pt-12">Log in to your account</h2>
+        <p className="text-light-3 text-xs md:base-regular mt-2">
+          Welcome back! Please enter your details
+        </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
           <FormField
@@ -104,11 +109,17 @@ const SigninForm = () => {
 
           <p className="text-small-regular text-light-2 text-center mt-2">
             Don&apos;t have an account?
-            <Link to={"/signup"} className="text-primary-500 text-small-semibold ml-1">
+            <Link to={"/signup"} className={cn(buttonVariants({ variant: "link" }), "text-primary-500 text-small-semibold ml-1")}>
               Sign up
             </Link>
           </p>
         </form>
+        <p className="text-xs text-muted-foreground text-center mt-2 px-12">
+          By clicking continue, you agree to our{" "}
+          <span className="underline">Terms of Service</span>
+          {" "}and{" "}
+          <span className="underline">Privacy Policy.</span>
+        </p>
       </div>
 
     </Form>
