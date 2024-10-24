@@ -43,8 +43,8 @@ export const BOTTOMBAR_LINKS = [
     label: "Saved",
   },
   {
-    imgURL: "/assets/icons/gallery-add.svg",
-    route: "/create-post",
-    label: "Create",
+    imgURL: "/assets/icons/profile.svg",
+    route: "/profile",
+    label: "Profil",
   },
 ];

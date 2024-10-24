@@ -86,7 +86,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             width={20}
             height={20}
             onClick={handleLikePost}
-            className={`cursor-pointer hover:invert-white animation ${
+            className={`cursor-pointer hover:invert hover:brightness-0 hover:transition animation ${
               isLiking && "animate-ping"
             }`}
           />
@@ -103,7 +103,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             width={20}
             height={20}
             onClick={handleSavePost}
-            className={`cursor-pointer hover:invert-white animation ${
+            className={`cursor-pointer hover:invert hover:brightness-0 hover:transition animation ${
               isSavingPost || isDeletingSave ? "animate-ping" : ""
             }`}
           />

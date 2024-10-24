@@ -26,7 +26,7 @@ const FaceCam = () => {
   const [isDetecting, setIsDetecting] = useState(false);
   const [isFaceSaved, setIsFaceSaved] = useState(false);
   const [facesData, setFacesData] = useState<Face[] | null>(null);
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
+  // const [imgSrc, setImgSrc] = useState<string | null>(null);
   const facesDataArr: string[] = [];
 
   const { data: faces, isLoading, isSuccess } = useGetAllFaces();
@@ -45,7 +45,7 @@ const FaceCam = () => {
           faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
           faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
           faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-          faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+          // faceapi.nets.faceExpressionNet.loadFromUri("/models"),
           faceapi.nets.mtcnn.loadFromUri("/models"),
         ]);
         setModelsLoaded(true);
@@ -115,7 +115,7 @@ const FaceCam = () => {
     // const canvas2 = canvasRef2.current;
 
     if (video && canvas) {
-      const displaySize = { width: video.videoWidth, height: video.videoHeight };
+      const displaySize = { width: 320, height: 240 };
       // const displaySize2 = { width: video2.width, height: video2.height };
       faceapi.matchDimensions(canvas, displaySize); // Match canvas to video size
       // faceapi.matchDimensions(canvas2, displaySize2); // Match canvas to video size
@@ -278,14 +278,14 @@ const FaceCam = () => {
     console.warn("Webcam not ready for detection");
   }
 
-  const handleCaptureImg = useCallback(
-    () => {
-      setImgSrc(videoRef.current.getScreenshot())
+  // const handleCaptureImg = useCallback(
+  //   () => {
+  //     setImgSrc(videoRef.current.getScreenshot())
 
-      console.log(imgSrc, 'imgSrc')
-    },
-    [videoRef]
-  )
+  //     console.log(imgSrc, 'imgSrc')
+  //   },
+  //   [videoRef]
+  // )
 
 
   return (
@@ -308,15 +308,15 @@ const FaceCam = () => {
 
         <Webcam
           ref={videoRef}
-          onPlay={detectFace}
-          // width={240}
-          // height={320}
+          // onPlay={detectFace}
+          width={240}
+          height={320}
           className="w-full h-auto max-w-full aspect-ratio-[3/4] md:max-w-lg md:h-auto rounded"  // Responsif dengan Tailwind
           videoConstraints={{
             facingMode: "user",
             aspectRatio: 3 / 4,
-            // width: 240,
-            // height: 320
+            width: 240,
+            height: 320
           }}
         />
         {/* <Camera
@@ -380,15 +380,15 @@ const FaceCam = () => {
           Scan Face Now
         </Button>
 
-        <Button
+        {/* <Button
           className="p-5 text-lg rounded-lg bg-gray-900 hover:scale-105 active:scale-95 transition transform text-white ml-4  outline outline-dark-4 outline-1"
           size="lg"
           onClick={handleCaptureImg}>
           Capture
-        </Button>
+        </Button> */}
       </div>
 
-      {imgSrc ?
+      {/* {imgSrc ?
         <img
           src={imgSrc}
           width={200}
@@ -397,7 +397,7 @@ const FaceCam = () => {
         :
         <>
         </>
-      }
+      } */}
 
     </div>
   );

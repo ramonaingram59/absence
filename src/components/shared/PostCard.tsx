@@ -42,7 +42,7 @@ const PostCard = ({ post }: { post: PostWithUser }) => {
 
         <Link
           to={`/update-post/${post.id}`}
-          className={`hover:invert-white ${
+          className={`hover:invert hover:brightness-0 hover:transition ${
             user?.id !== post?.creator?.id && "hidden"
           }`}
         >
@@ -56,7 +56,7 @@ const PostCard = ({ post }: { post: PostWithUser }) => {
 
           <ul className="flex gap-1 mt-2">
             {post?.tags?.map((tag: string, index) => (
-              <li key={tag + index} className="text-light-3 hover:invert-white">
+              <li key={tag + index} className="text-light-3 hover:invert hover:brightness-0 hover:transition">
                 #{tag}
               </li>
             ))}

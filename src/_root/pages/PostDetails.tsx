@@ -93,7 +93,7 @@ const PostDetails = () => {
                   <ul className="flex gap-1 mt-2">
                     {
                       post?.tags?.map((tag: string) => (
-                        <li key={tag} className="text-light-3 hover:invert-white">
+                        <li key={tag} className="text-light-3 hover:invert hover:brightness-0 hover:transition">
                           #{tag}
                         </li>
                       ))

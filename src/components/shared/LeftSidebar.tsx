@@ -19,15 +19,18 @@ const LeftSidebar = () => {
   }, [isSuccess])
 
   return (
-    <nav className='leftsidebar'>
+    <nav className='hidden md:flex px-6 py-10 flex-col justify-between min-w-[270px] shadow'>
       <div className="flex flex-col gap-11">
         <Link to={"/"} className='flex gap-3 items-center justify-center'>
-          <img
-            src='/assets/image/logo.png'
-            alt='logo'
-            width={40}
-            height={40}
-          />
+          <div className="flex flex-row items-center justify-center gap-2">
+            <img
+              src="/assets/image/side-img.gif"
+              alt="logo"
+              width={40}
+              height={40}
+            />
+            <h2 className="text-xl italic font-semibold text-primary">IFCAbsence</h2>
+          </div>
         </Link>
 
         <Link to={`/profile/${user?.id}`}
@@ -39,11 +42,11 @@ const LeftSidebar = () => {
             className='h-10 w-10 rounded-full'
           />
           <div className='flex flex-col'>
-            <p className='body-bold max-w-52 line-clamp-1'>
+            <p className='font-bold leading-[140%] max-w-52 line-clamp-1'>
               {user?.name}
             </p>
 
-            <p className='small-regular text-light-3'>
+            <p className='font-normal leading-[140%] text-muted-foreground'>
               @{user?.username}
             </p>
           </div>
@@ -55,8 +58,8 @@ const LeftSidebar = () => {
 
             return <li
               key={link.label}
-              className={`leftsidebar-link group 
-                ${isActive && 'bg-primary-500'}`}
+              className={`rounded-lg hover:bg-green-300 transition group 
+                ${isActive && 'bg-green-300'}`}
             >
               <NavLink
                 to={link.route}
@@ -66,8 +69,8 @@ const LeftSidebar = () => {
                   src={link.imgURL}
                   alt={link.label}
                   className={
-                    `group-hover:invert-white h-5 w-5
-                    ${isActive && 'invert-white'} `}
+                    `group-hover:invert group-hover:brightness-0 brightness-50 group-hover:transition h-5 w-5
+                    ${isActive && 'invert brightness-0 transition'} `}
                 />
                 {link.label}
               </NavLink>
@@ -78,14 +81,14 @@ const LeftSidebar = () => {
       </div>
       <Button
         variant={"ghost"}
-        className='shad-button_ghost group leftsidebar-link hover:invert-dark'
+        className='flex gap-4 items-center justify-start hover:bg-transparent group rounded-lg base-medium hover:bg-green-300 transition hover:brightness-75 hover:transition'
         onClick={() => signOut()}
       >
         <img
           src='/assets/icons/logout.svg'
           alt='logout'
           className={
-            `group-hover:invert-white h-5 w-5`}
+            `group-hover:invert group-hover:brightness-0 brightness-50 group-hover:transition h-5 w-5`}
         />
         <p className='small-medium lg:base-medium'>
           Logout
