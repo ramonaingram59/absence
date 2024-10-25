@@ -44,7 +44,7 @@ export const BOTTOMBAR_LINKS = [
   },
   {
     imgURL: "/assets/icons/profile.svg",
-    route: "/profile",
+    route: "/profile/1",
     label: "Profil",
   },
 ];

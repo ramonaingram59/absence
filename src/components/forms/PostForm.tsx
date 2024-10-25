@@ -14,26 +14,26 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import {
-  useCreatePost,
-  useUpdatePost,
-} from "@/lib/react-query/queriesAndMutations";
+// import {
+//   useCreatePost,
+//   useUpdatePost,
+// } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 import { toast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
-import { PostWithUser } from "@/types";
+// import { PostWithUser } from "@/types";
 
 type PostFormProps = {
-  post?: PostWithUser;
+  post?: any;
   action: "create" | "update";
 };
 
 const PostForm = ({ post, action }: PostFormProps) => {
-  const { mutateAsync: createPost, isPending: isCreatingPost } =
-    useCreatePost();
-  const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
-    useUpdatePost();
+  // const { mutateAsync: createPost, isPending: isCreatingPost } =
+  //   useCreatePost();
+  // const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
+  //   useUpdatePost();
 
   const { user } = useUserContext();
   const navigate = useNavigate();
@@ -52,38 +52,38 @@ const PostForm = ({ post, action }: PostFormProps) => {
   });
   const { handleSubmit, control } = form;
 
-  const onSubmit = async (data: z.infer<typeof PostValidation>) => {
-    if (post && action === "update") {
-      const updatedPost = await updatePost({
-        ...data,
-        postId: post?.id,
-        imageId: post?.imageId,
-        imageUrl: post?.imageUrl,
-      });
+  // const onSubmit = async (data: z.infer<typeof PostValidation>) => {
+  //   if (post && action === "update") {
+  //     const updatedPost = await updatePost({
+  //       ...data,
+  //       postId: post?.id,
+  //       imageId: post?.imageId,
+  //       imageUrl: post?.imageUrl,
+  //     });
 
-      if (!updatedPost) {
-        toast({ title: "Failed, please try again." });
-      }
+  //     if (!updatedPost) {
+  //       toast({ title: "Failed, please try again." });
+  //     }
 
-      return navigate(`/posts/${post?.id}`);
-    }
+  //     return navigate(`/posts/${post?.id}`);
+  //   }
 
-    const newPost = await createPost({
-      ...data,
-      userId: user?.id,
-    });
+  //   const newPost = await createPost({
+  //     ...data,
+  //     userId: user?.id,
+  //   });
 
-    if (!newPost) {
-      toast({ title: "Failed, please try again." });
-    }
+  //   if (!newPost) {
+  //     toast({ title: "Failed, please try again." });
+  //   }
 
-    navigate("/");
-  };
+  //   navigate("/");
+  // };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        // onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col w-full max-w-5xl gap-9"
       >
         <FormField
@@ -160,17 +160,17 @@ const PostForm = ({ post, action }: PostFormProps) => {
           </Button>
 
           <Button
-            disabled={isCreatingPost || isLoadingUpdate}
+            // disabled={isCreatingPost || isLoadingUpdate}
             type="submit"
             className="capitalize shad-button_primary whitespace-nowrap hover:invert-dark"
           >
-            {isCreatingPost || isLoadingUpdate ? (
+            {/* {isCreatingPost || isLoadingUpdate ? (
               <div className="gap-2 flex-center">
                 <Loader /> Loading...
               </div>
             ) : (
               action
-            )}
+            )} */}
           </Button>
         </div>
       </form>

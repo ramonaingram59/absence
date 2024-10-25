@@ -12,9 +12,9 @@ import { Link, useNavigate } from "react-router-dom"
 import { useToast } from "@/components/ui/use-toast"
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
-import { checkRegisteredUser } from "@/lib/appwrite/api"
 import { ToastAction } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
+import { checkRegisteredUser } from "@/lib/actions/authActions"
 
 
 
@@ -27,7 +27,7 @@ const SignupForm = () => {
     resolver: zodResolver(SignupValidation),
     mode: "onSubmit",
     defaultValues: {
-      username: '',
+      departement: '',
       name: '',
       email: '',
       password: ''
@@ -42,8 +42,7 @@ const SignupForm = () => {
   const onSubmit = async (values: z.infer<typeof SignupValidation>) => {
     // Check is user registered
     const registeredUser = await checkRegisteredUser({
-      email: values.email,
-      username: values.username
+      email: values.email
     })
     if (registeredUser && registeredUser.length > 0) {
       return toast({
@@ -93,7 +92,7 @@ const SignupForm = () => {
 
         <h2 className="text-xl font-semibold md:h2-bold pt-5 sm:pt-12">Create a new account</h2>
         <p className="text-light-3 text-xs md:base-regular mt-2">
-          To use IFCABsence, please enter your details</p>
+          To use IFCAbsence, please enter your details</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full mt-4">
           <FormField
@@ -111,10 +110,10 @@ const SignupForm = () => {
           />
           <FormField
             control={control}
-            name="username"
+            name="departement"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Departement</FormLabel>
                 <FormControl>
                   <Input type="text" className="shad-input" {...field} />
                 </FormControl>

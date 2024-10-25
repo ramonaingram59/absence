@@ -1,10 +1,10 @@
-import { Database } from "@/lib/supabase/supabase_types";
+import { Database } from "@/types/supabase";
 import React from "react";
 
 export type INewUser = {
   name: string;
   email: string;
-  username: string;
+  departement: string;
   password: string;
 };
 
@@ -20,7 +20,7 @@ export type IContextType = {
 export type IUser = {
   id: string;
   name: string;
-  username: string;
+  departement: string;
   email: string;
   imageUrl: string;
   bio: string;
@@ -50,11 +50,16 @@ export type IUpdatePost = {
   tags?: string;
 };
 
-export type Post = Database["public"]["Tables"]["Posts"]["Row"];
+// export type Post = Database["public"]["Tables"]["Posts"]["Row"];
 export type User = Database["public"]["Tables"]["Users"]["Row"];
-export type Save = Database["public"]["Tables"]["Saves"]["Row"];
-export type Face = Database["public"]["Tables"]["Faces"]["Row"];
+// export type Save = Database["public"]["Tables"]["Saves"]["Row"];
+export type Face = Database["public"]["Tables"]["FaceData"]["Row"];
 
-export interface PostWithUser extends Omit<Post, "creator"> {
-  creator: User;
+// export interface PostWithUser extends Omit<Post, "creator"> {
+//   creator: User;
+// }
+
+export enum ROLE {
+  ADMIN = 'ADMIN',
+  USER = 'USER'
 }

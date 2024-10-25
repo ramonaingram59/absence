@@ -2,9 +2,9 @@ import { useUserContext } from "@/context/AuthContext";
 import { timeAgo } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import PostStats from "./PostStats";
-import { PostWithUser } from "@/types";
+// import { PostWithUser } from "@/types";
 
-const PostCard = ({ post }: { post: PostWithUser }) => {
+const PostCard = ({ post }: { post: any }) => {
   const { user } = useUserContext();
 
   if (!post.creator) return;
@@ -55,7 +55,7 @@ const PostCard = ({ post }: { post: PostWithUser }) => {
           <p>{post.caption}</p>
 
           <ul className="flex gap-1 mt-2">
-            {post?.tags?.map((tag: string, index) => (
+            {post?.tags?.map((tag: string, index: number) => (
               <li key={tag + index} className="text-light-3 hover:invert hover:brightness-0 hover:transition">
                 #{tag}
               </li>

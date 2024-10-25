@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/lib/appwrite/api'
+import { getCurrentUser } from '@/lib/actions/authActions'
 import { IContextType, IUser } from '@/types'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom'
 export const INITIAL_USER = {
   id: '',
   name: '',
-  username: '',
+  departement: '',
   email: '',
   imageUrl: '',
   bio: ''
-}
+} 
 
 export const INITIAL_STATE = {
   user: INITIAL_USER,
@@ -38,10 +38,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({
           id: currentAccount.id,
           name: currentAccount.name!,
-          username: currentAccount.username,
+          departement: currentAccount.departement!,
           email: currentAccount.email,
           imageUrl: currentAccount.imageUrl!,
-          bio: currentAccount.bio!
+          bio: ''
         })
 
         setIsAuthenticated(true)

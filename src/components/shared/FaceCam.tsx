@@ -45,16 +45,18 @@ const FaceCam = () => {
           faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
           faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
           faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-          // faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+          faceapi.nets.faceExpressionNet.loadFromUri("/models"),
           faceapi.nets.mtcnn.loadFromUri("/models"),
         ]);
         setModelsLoaded(true);
       } catch (err) {
         console.error("Failed to load models", err);
       }
+      await detectFace()
     };
 
     loadModels();
+
 
     return () => {
       if (streamRef.current) {
@@ -97,6 +99,7 @@ const FaceCam = () => {
   }, [modelsLoaded, isDetecting]);
 
   const detectFace = useCallback(async () => {
+    console.log('Detecting face')
     if (
       !videoRef.current ||
       !canvasRef.current ||

@@ -1,15 +1,15 @@
-import {
-  useDeleteSavedPost,
-  useGetCurrentUser,
-  useLikePost,
-  useSavePost,
-} from "@/lib/react-query/queriesAndMutations";
+// import {
+//   useDeleteSavedPost,
+//   useGetCurrentUser,
+//   useLikePost,
+//   useSavePost,
+// } from "@/lib/react-query/queriesAndMutations";
 import { checkIsLiked } from "@/lib/utils";
-import { PostWithUser } from "@/types";
+// import { PostWithUser } from "@/types";
 import { useEffect, useState } from "react";
 
 type PostStatsProps = {
-  post: PostWithUser;
+  post: any;
   userId: string;
 };
 
@@ -20,15 +20,15 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   const [likes, setLikes] = useState(likesList);
   const [isSaved, setIsSaved] = useState(false);
 
-  const { mutate: likePost, isPending: isLiking } = useLikePost();
-  const { mutate: savePost, isPending: isSavingPost } = useSavePost();
-  const { mutate: deleteSavePost, isPending: isDeletingSave } =
-    useDeleteSavedPost();
-  const { data: currentUser } = useGetCurrentUser();
+  // const { mutate: likePost, isPending: isLiking } = useLikePost();
+  // const { mutate: savePost, isPending: isSavingPost } = useSavePost();
+  // const { mutate: deleteSavePost, isPending: isDeletingSave } =
+  //   useDeleteSavedPost();
+  // const { data: currentUser } = useGetCurrentUser();
 
-  const savedPostRecord = currentUser?.save
-    ? currentUser?.save!.find((postId: string) => postId === post.id)
-    : "";
+  // const savedPostRecord = currentUser?.save
+  //   ? currentUser?.save!.find((postId: string) => postId === post.id)
+  //   : "";
 
   const handleLikePost = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -44,39 +44,39 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     }
 
     setLikes(newLikes);
-    likePost({
-      postId: post.id,
-      likesArray: newLikes,
-    });
+    // likePost({
+    //   postId: post.id,
+    //   likesArray: newLikes,
+    // });
   };
 
   const handleSavePost = (e: React.MouseEvent) => {
     e.stopPropagation();
 
-    if (savedPostRecord) {
-      setIsSaved(false);
-      return deleteSavePost({
-        savedRecordId: savedPostRecord,
-      });
-    } else {
-      savePost({
-        postId: post.id,
-        userId: userId,
-      });
-      setIsSaved(true);
-    }
+    // if (savedPostRecord) {
+    //   setIsSaved(false);
+    //   return deleteSavePost({
+    //     savedRecordId: savedPostRecord,
+    //   });
+    // } else {
+    //   savePost({
+    //     postId: post.id,
+    //     userId: userId,
+    //   });
+    //   setIsSaved(true);
+    // }
   };
 
-  useEffect(() => {
-    setIsSaved(!!savedPostRecord);
-  }, [currentUser]);
+  // useEffect(() => {
+  //   setIsSaved(!!savedPostRecord);
+  // }, [currentUser]);
 
   return (
     <div className="z-20 flex items-center justify-between">
       <div className="flex gap-2 mr-5">
         {/* {isLiking || isGettingUser ? <Loader /> : */}
         <>
-          <img
+          {/* <img
             src={
               checkIsLiked(likes, userId)
                 ? "/assets/icons/liked.svg"
@@ -89,12 +89,12 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             className={`cursor-pointer hover:invert hover:brightness-0 hover:transition animation ${
               isLiking && "animate-ping"
             }`}
-          />
+          /> */}
           <p className="small-medium lg:base-medium">{likes?.length}</p>
         </>
         {/* } */}
       </div>
-      <div className="flex gap-2">
+      {/* <div className="flex gap-2">
         {
           // isSavingPost || isDeletingSave || isGettingUser ? <Loader /> :
           <img
@@ -108,7 +108,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             }`}
           />
         }
-      </div>
+      </div> */}
     </div>
   );
 };

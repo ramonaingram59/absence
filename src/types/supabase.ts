@@ -7,148 +7,192 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
-      Faces: {
+      AttendanceRecord: {
         Row: {
-          created_at: string
+          date: string | null
+          id: string
+          inTime: string | null
+          outTime: string | null
+          status: string | null
+          userId: string
+        }
+        Insert: {
+          date?: string | null
+          id?: string
+          inTime?: string | null
+          outTime?: string | null
+          status?: string | null
+          userId: string
+        }
+        Update: {
+          date?: string | null
+          id?: string
+          inTime?: string | null
+          outTime?: string | null
+          status?: string | null
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Attendance_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      FaceData: {
+        Row: {
+          createdAt: string
           descriptor: Json | null
           id: string
           name: string
+          userId: string | null
         }
         Insert: {
-          created_at?: string
+          createdAt?: string
           descriptor?: Json | null
           id?: string
           name: string
+          userId?: string | null
         }
         Update: {
-          created_at?: string
+          createdAt?: string
           descriptor?: Json | null
           id?: string
           name?: string
+          userId?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "FaceData_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      RoomEntryRecord: {
+        Row: {
+          capturedAt: string | null
+          createdAt: string
+          id: string
+          isRecognized: boolean | null
+          userId: string | null
+        }
+        Insert: {
+          capturedAt?: string | null
+          createdAt?: string
+          id?: string
+          isRecognized?: boolean | null
+          userId?: string | null
+        }
+        Update: {
+          capturedAt?: string | null
+          createdAt?: string
+          id?: string
+          isRecognized?: boolean | null
+          userId?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "RoomEntryRecord_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "Users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      UnknownFaceRecord: {
+        Row: {
+          faceData: string | null
+          id: string
+          notes: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          faceData?: string | null
+          id?: string
+          notes?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          faceData?: string | null
+          id?: string
+          notes?: string | null
+          timestamp?: string | null
         }
         Relationships: []
       }
-      Posts: {
-        Row: {
-          caption: string | null
-          createdAt: string
-          creator: string
-          id: string
-          imageId: string
-          imageUrl: string
-          likedBy: string[] | null
-          location: string | null
-          savedBy: string[] | null
-          tags: string[] | null
-        }
-        Insert: {
-          caption?: string | null
-          createdAt?: string
-          creator: string
-          id?: string
-          imageId: string
-          imageUrl: string
-          likedBy?: string[] | null
-          location?: string | null
-          savedBy?: string[] | null
-          tags?: string[] | null
-        }
-        Update: {
-          caption?: string | null
-          createdAt?: string
-          creator?: string
-          id?: string
-          imageId?: string
-          imageUrl?: string
-          likedBy?: string[] | null
-          location?: string | null
-          savedBy?: string[] | null
-          tags?: string[] | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Posts_creator_fkey"
-            columns: ["creator"]
-            isOneToOne: false
-            referencedRelation: "Users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      Saves: {
-        Row: {
-          id: string
-          post: string
-          user: string
-        }
-        Insert: {
-          id?: string
-          post: string
-          user: string
-        }
-        Update: {
-          id?: string
-          post?: string
-          user?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Saves_post_fkey"
-            columns: ["post"]
-            isOneToOne: false
-            referencedRelation: "Posts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "Saves_user_fkey"
-            columns: ["user"]
-            isOneToOne: false
-            referencedRelation: "Users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       Users: {
         Row: {
-          accountId: string
-          bio: string | null
+          authId: string
           createdAt: string
+          departement: string | null
           email: string
           id: string
           imageId: string | null
           imageUrl: string | null
-          liked: string[] | null
           name: string | null
-          save: string[] | null
-          username: string
+          password: string | null
+          role: string | null
+          updatedAt: string | null
         }
         Insert: {
-          accountId: string
-          bio?: string | null
+          authId: string
           createdAt?: string
+          departement?: string | null
           email: string
           id?: string
           imageId?: string | null
           imageUrl?: string | null
-          liked?: string[] | null
           name?: string | null
-          save?: string[] | null
-          username: string
+          password?: string | null
+          role?: string | null
+          updatedAt?: string | null
         }
         Update: {
-          accountId?: string
-          bio?: string | null
+          authId?: string
           createdAt?: string
+          departement?: string | null
           email?: string
           id?: string
           imageId?: string | null
           imageUrl?: string | null
-          liked?: string[] | null
           name?: string | null
-          save?: string[] | null
-          username?: string
+          password?: string | null
+          role?: string | null
+          updatedAt?: string | null
         }
         Relationships: []
       }
@@ -248,4 +292,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

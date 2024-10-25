@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import bcrypt from 'bcryptjs'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -31,4 +32,11 @@ export const timeAgo = (timestamp: string) => {
 
 export const checkIsLiked = (likeList: string[], userId: string) => {
   return likeList.includes(userId)
+}
+
+export const bcryptPasswordHash = async (password: string) => {
+  const salt = await bcrypt.genSalt(10)
+  const hashedPassword = await bcrypt.hash(password, salt)
+
+  return hashedPassword
 }

@@ -47,7 +47,7 @@ const LeftSidebar = () => {
             </p>
 
             <p className='font-normal leading-[140%] text-muted-foreground'>
-              @{user?.username}
+              @{user?.departement}
             </p>
           </div>
         </Link>

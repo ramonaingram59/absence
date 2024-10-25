@@ -1,12 +1,12 @@
 import PostForm from "@/components/forms/PostForm";
 import Loader from "@/components/shared/Loader";
-import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
+// import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
 import { useParams } from "react-router-dom";
 
 const EditPost = () => {
   const { id } = useParams();
 
-  const { data: post, isPending: isGettingPost } = useGetPostById(id || "");
+  // const { data: post, isPending: isGettingPost } = useGetPostById(id || "");
 
   return (
     <div className="flex flex-1">
@@ -21,7 +21,7 @@ const EditPost = () => {
           <h2 className="w-full text-left h3-bold md:h2-bold">Edit post</h2>
         </div>
 
-        {isGettingPost ? <Loader /> : <PostForm action="update" post={post} />}
+        {/* {isGettingPost ? <Loader /> : <PostForm action="update" post={post} />} */}
       </div>
     </div>
   );

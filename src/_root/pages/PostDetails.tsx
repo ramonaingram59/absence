@@ -2,13 +2,13 @@ import Loader from "@/components/shared/Loader"
 import PostStats from "@/components/shared/PostStats"
 import { Button } from "@/components/ui/button"
 import { useUserContext } from "@/context/AuthContext"
-import { useGetPostById } from "@/lib/react-query/queriesAndMutations"
+// import { useGetPostById } from "@/lib/react-query/queriesAndMutations"
 import { timeAgo } from "@/lib/utils"
 import { Link, useParams } from "react-router-dom"
 
 const PostDetails = () => {
   const { id } = useParams()
-  const { data: post, isPending: isPostLoading } = useGetPostById(id || '')
+  // const { data: post, isPending: isPostLoading } = useGetPostById(id || '')
 
   const { user } = useUserContext()
 
@@ -20,7 +20,7 @@ const PostDetails = () => {
 
   return (
     <div className="post_details-container">
-      {
+      {/* {
         isPostLoading
           ? <Loader />
           : (
@@ -108,7 +108,7 @@ const PostDetails = () => {
               </div>
             </div>
           )
-      }
+      } */}
     </div>
   )
 }
