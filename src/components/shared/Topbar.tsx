@@ -17,7 +17,7 @@ const Topbar = () => {
 
   return (
     <section className='fixed top-0 z-50 md:hidden w-full bg-gradient-to-tl from-green-100 to-transparent backdrop-blur-sm bg-opacity-60 shadow-sm'>
-      <div className='flex justify-between items-center py-4 px-5'>
+      <div className='flex justify-between items-center h-[6svh] px-5'>
         <Link to={"/"} className='flex gap-3 items-center'>
           <div className="flex flex-row items-center justify-center gap-2">
             <img

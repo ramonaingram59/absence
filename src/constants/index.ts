@@ -33,18 +33,18 @@ export const BOTTOMBAR_LINKS = [
     label: "Home",
   },
   {
-    imgURL: "/assets/icons/wallpaper.svg",
-    route: "/explore",
-    label: "Explore",
+    imgURL: "/assets/icons/face-scan.svg",
+    route: "/saved",
+    label: "Scan",
   },
   {
-    imgURL: "/assets/icons/bookmark.svg",
-    route: "/saved",
-    label: "Saved",
+    imgURL: "/assets/icons/log.svg",
+    route: "/explore",
+    label: "History",
   },
   {
     imgURL: "/assets/icons/profile.svg",
     route: "/profile/1",
-    label: "Profil",
+    label: "Profile",
   },
 ];

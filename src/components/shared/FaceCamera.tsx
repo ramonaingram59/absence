@@ -7,11 +7,8 @@ import {
   useGetAllFaces,
   useSaveFaceDescriptors,
 } from "@/lib/react-query/queriesAndMutations";
-// import Camera from 'react-html5-camera-photo';
-import 'react-html5-camera-photo/build/css/index.css';
-// import { Camera } from 'react-camera-pro'
 import Webcam from "react-webcam";
-// import Camera from "react-html5-camera-photo";
+
 
 
 const FaceCam = () => {
@@ -20,19 +17,18 @@ const FaceCam = () => {
   // const videoRef2 = useRef<HTMLImageElement | null>(null);
   // const canvasRef2 = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [detectedFace, setDetectedFace] = useState<Float32Array | null>(null);
   const [personName, setPersonName] = useState<string>("");
   const [isDetecting, setIsDetecting] = useState(false);
   const [isFaceSaved, setIsFaceSaved] = useState(false);
   const [facesData, setFacesData] = useState<Face[] | null>(null);
-  // const [imgSrc, setImgSrc] = useState<string | null>(null);
+  const [imgSrc, setImgSrc] = useState<string | null>(null);
   const facesDataArr: string[] = [];
 
   const { data: faces, isLoading, isSuccess } = useGetAllFaces();
   const { mutateAsync: saveFaces } = useSaveFaceDescriptors();
-
-  const lastAttendanceMap = useRef<Map<string, number>>(new Map());
 
   useEffect(() => {
     if (faces) setFacesData(faces);
@@ -45,25 +41,33 @@ const FaceCam = () => {
           faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
           faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
           faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-          faceapi.nets.faceExpressionNet.loadFromUri("/models"),
-          faceapi.nets.mtcnn.loadFromUri("/models"),
+          // faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+          // faceapi.nets.mtcnn.loadFromUri("/models"),
         ]);
         setModelsLoaded(true);
       } catch (err) {
         console.error("Failed to load models", err);
       }
-      await detectFace()
     };
 
     loadModels();
 
-
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-      }
-    };
+    return () => streamRef?.current?.getTracks().forEach((track) => track.stop());
   }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(
+      () => {
+        if (modelsLoaded && !isDetecting && videoRef.current?.video.readyState == 4) {
+          detectFace();
+        }
+      },
+      personName !== "" ? 1000 : 250
+    ); // Detect face every 500
+
+    return () => clearInterval(intervalId); // Clean up the interval on unmount
+  }, [modelsLoaded, isDetecting]);
+
 
   // useEffect(() => {
   //   const initializeWebcam = async () => {
@@ -85,18 +89,6 @@ const FaceCam = () => {
   //   initializeWebcam();
   // }, [modelsLoaded]);
 
-  useEffect(() => {
-    const intervalId = setInterval(
-      () => {
-        if (modelsLoaded && !isDetecting) {
-          detectFace();
-        }
-      },
-      personName !== "" ? 1000 : 250
-    ); // Detect face every 500
-
-    return () => clearInterval(intervalId); // Clean up the interval on unmount
-  }, [modelsLoaded, isDetecting]);
 
   const detectFace = useCallback(async () => {
     console.log('Detecting face')
@@ -112,21 +104,21 @@ const FaceCam = () => {
 
     setIsDetecting(true);
 
-    const video = videoRef.current.video as any;
+    const video = videoRef.current.video;
     // const video2 = videoRef2.current;
     const canvas = canvasRef.current;
     // const canvas2 = canvasRef2.current;
+    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+    faceapi.matchDimensions(canvas, displaySize); // Match canvas to video size
 
     if (video && canvas) {
-      const displaySize = { width: 320, height: 240 };
       // const displaySize2 = { width: video2.width, height: video2.height };
-      faceapi.matchDimensions(canvas, displaySize); // Match canvas to video size
       // faceapi.matchDimensions(canvas2, displaySize2); // Match canvas to video size
 
       const detections = await faceapi
         .detectSingleFace(video)
         .withFaceLandmarks()
-        .withFaceExpressions()
+        // .withFaceExpressions()
         .withFaceDescriptor();
 
       // const detectionsManyFace = await faceapi
@@ -190,21 +182,9 @@ const FaceCam = () => {
         // faceapi.draw.drawDetections(canvas2, resizedDetections2);
 
         const { box } = resizedDetections.detection;
-        if (personName) {
-          const textField = new faceapi.draw.DrawTextField(
-            [personName],
-            box.bottomLeft,
-            { fontSize: 12 }
-          );
-          textField.draw(canvas);
-        } else {
-          const textField = new faceapi.draw.DrawTextField(
-            ["Tidak dikenali"],
-            box.bottomLeft,
-            { fontSize: 12 }
-          );
-          textField.draw(canvas);
-        }
+        const text = personName ? personName : "Tidak dikenali";
+        new faceapi.draw.DrawTextField([text], box.bottomLeft, { fontSize: 12 }).draw(canvas);
+
       } else {
         console.warn("No detections");
       }
@@ -221,6 +201,7 @@ const FaceCam = () => {
       const savedDescriptor = new Float32Array(
         JSON.parse(face.descriptor as string)
       );
+
       const distance = faceapi.euclideanDistance(descriptor, savedDescriptor);
 
       if (distance < smallestDistance) {
@@ -235,35 +216,14 @@ const FaceCam = () => {
       console.log(`Face recognized: ${bestMatch}`);
 
       facesDataArr.push(bestMatch);
-      // toast({ title: `Face recognized: ${bestMatch.name}` });
+
     } else {
       setPersonName("");
-      // toast({ title: 'Face not recognized' });
+
     }
   };
 
   const handleSaveFace = async () => {
-    if (detectedFace) {
-      const lastAttendance = lastAttendanceMap.current.get(
-        detectedFace.toString()
-      );
-      const currentTime = Date.now();
-
-      if (lastAttendance && currentTime - lastAttendance < 10 * 60 * 1000) {
-        // If last attendance was less than 10 minutes ago, skip saving
-        console.log(
-          `Skipping save for ${detectedFace}, attended within 10 minutes.`
-        );
-        toast({
-          title: `${detectedFace} has already been marked within the last 10 minutes.`,
-        });
-        return;
-      }
-
-      // Update the last attendance time
-      lastAttendanceMap.current.set(detectedFace.toString(), currentTime);
-    }
-
     if (detectedFace && !isFaceSaved) {
       await saveFaces(detectedFace);
       setIsFaceSaved(true);
@@ -281,14 +241,9 @@ const FaceCam = () => {
     console.warn("Webcam not ready for detection");
   }
 
-  // const handleCaptureImg = useCallback(
-  //   () => {
-  //     setImgSrc(videoRef.current.getScreenshot())
-
-  //     console.log(imgSrc, 'imgSrc')
-  //   },
-  //   [videoRef]
-  // )
+  const handleCaptureImg = useCallback(() => {
+    setImgSrc(videoRef.current.getScreenshot() ?? null)
+  }, [videoRef])
 
 
   return (
@@ -300,26 +255,21 @@ const FaceCam = () => {
           <p>Recognized: {personName}</p>
         </div>
       )}
-      {facesDataArr && (
-        <div>
-          <p>Recognized: {facesDataArr}</p>
-        </div>
-      )}
 
       {/* Kamera dan Canvas untuk Face Recognition */}
       <div className="relative justify-center items-center w-full mb-5">
 
         <Webcam
           ref={videoRef}
-          // onPlay={detectFace}
+          onPlay={detectFace}
           width={240}
           height={320}
-          className="w-full h-auto max-w-full aspect-ratio-[3/4] md:max-w-lg md:h-auto rounded"  // Responsif dengan Tailwind
+          className="w-full h-auto max-w-full aspect-ratio-[3/4] md:max-w-lg md:h-auto rounded"
           videoConstraints={{
             facingMode: "user",
             aspectRatio: 3 / 4,
-            width: 240,
-            height: 320
+            // width: 240,
+            // height: 320
           }}
         />
         {/* <Camera
@@ -383,15 +333,15 @@ const FaceCam = () => {
           Scan Face Now
         </Button>
 
-        {/* <Button
+        <Button
           className="p-5 text-lg rounded-lg bg-gray-900 hover:scale-105 active:scale-95 transition transform text-white ml-4  outline outline-dark-4 outline-1"
           size="lg"
           onClick={handleCaptureImg}>
           Capture
-        </Button> */}
+        </Button>
       </div>
 
-      {/* {imgSrc ?
+      {imgSrc ?
         <img
           src={imgSrc}
           width={200}
@@ -400,7 +350,7 @@ const FaceCam = () => {
         :
         <>
         </>
-      } */}
+      }
 
     </div>
   );

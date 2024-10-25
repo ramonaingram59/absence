@@ -3,14 +3,14 @@
 import Loader from '@/components/shared/Loader';
 import { lazy, Suspense } from 'react';
 
-const FaceCam = lazy(() => import('@/components/shared/FaceCam'));
+const FaceCamera = lazy(() => import('@/components/shared/FaceCamera'));
 
 const Saved = () => {
   return (
     <div>Saved
 
       <Suspense fallback={<Loader />}>
-        <FaceCam />
+        <FaceCamera />
       </Suspense>
     </div>
   )

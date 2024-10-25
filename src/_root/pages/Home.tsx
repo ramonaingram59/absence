@@ -9,15 +9,7 @@ const Home = () => {
       <div className="home-container">
         <div className="home-posts">
           <h2 className="w-full text-left h3-bold md:h2-bold">Feeds</h2>
-          {/* {isPostLoading && !posts ? (
-            <Loader />
-          ) : (
-            <ul className="flex flex-col flex-1 w-full gap-9">
-              {posts?.map((post) => (
-                <PostCard post={post} key={post.id} />
-              ))}
-            </ul>
-          )} */}
+
         </div>
       </div>
     </div>
