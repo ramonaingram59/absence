@@ -6,7 +6,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { QUERY_KEYS } from "./queryKey";
-import { createUserAccount, getCurrentUser, signInAccount, signOutAccount } from "../actions/authActions";
+import { createUserAccount, getCurrentUser, signInAccount, signOutAccount } from "../actions/api/auth";
 import { allFaces, saveFaces } from "../appwrite/api";
 
 export const useCreateUserAccount = () => {

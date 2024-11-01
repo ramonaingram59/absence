@@ -50,16 +50,15 @@ export type IUpdatePost = {
   tags?: string;
 };
 
-// export type Post = Database["public"]["Tables"]["Posts"]["Row"];
 export type User = Database["public"]["Tables"]["Users"]["Row"];
-// export type Save = Database["public"]["Tables"]["Saves"]["Row"];
-export type Face = Database["public"]["Tables"]["FaceData"]["Row"];
+export type FaceData = Database["public"]["Tables"]["FaceData"]["Row"];
+export type AttendanceRecord = Database["public"]["Tables"]["AttendanceRecord"]["Row"];
+export type Departement = Database["public"]["Tables"]["Departement"]["Row"];
+export type RoomEntryRecord = Database["public"]["Tables"]["RoomEntryRecord"]["Row"];
+export type UnknownFaceRecord = Database["public"]["Tables"]["UnknownFaceRecord"]["Row"];
 
-// export interface PostWithUser extends Omit<Post, "creator"> {
-//   creator: User;
-// }
 
 export enum ROLE {
-  ADMIN = 'ADMIN',
-  USER = 'USER'
+  ADMIN = 'admin',
+  USER = 'user'
 }

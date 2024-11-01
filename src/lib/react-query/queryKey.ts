@@ -14,5 +14,7 @@ export enum QUERY_KEYS {
 
   SEARCH_POSTS = 'getSearchPosts',
 
-  CHECK_REGISTERED_USER = 'checkRegisteredUser'
+  CHECK_REGISTERED_USER = 'checkRegisteredUser',
+
+  GET_HISTORY_RECORD = 'getHistoryRecord'
 }

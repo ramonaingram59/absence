@@ -1,5 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { format, parseISO } from 'date-fns'
+import moment from 'moment'
 import bcrypt from 'bcryptjs'
 
 export function cn(...inputs: ClassValue[]) {
@@ -39,4 +41,9 @@ export const bcryptPasswordHash = async (password: string) => {
   const hashedPassword = await bcrypt.hash(password, salt)
 
   return hashedPassword
+}
+
+
+export const formatDate = (date: Date) => {
+  return date ? format(date, 'eeee, dd MMM yyyy') : '-'
 }

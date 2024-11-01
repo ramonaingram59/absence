@@ -14,7 +14,7 @@ import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/querie
 import { useUserContext } from "@/context/AuthContext"
 import { ToastAction } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
-import { checkRegisteredUser } from "@/lib/actions/authActions"
+import { checkRegisteredUser } from "@/lib/actions/api/auth"
 
 
 

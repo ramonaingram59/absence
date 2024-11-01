@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/lib/actions/authActions'
+import { getCurrentUser } from '@/lib/actions/api/auth'
 import { IContextType, IUser } from '@/types'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'

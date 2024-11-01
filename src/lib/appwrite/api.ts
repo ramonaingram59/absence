@@ -1,7 +1,7 @@
 import { INewPost, IUpdatePost } from "@/types";
 import { appwriteConfig, databases } from "../config";
 import { supabase } from "../supabase/connect";
-import { getAccount, getCurrentUser } from "../actions/authActions";
+import { getAccount, getCurrentUser } from "../actions/api/auth";
 
 export const uploadFile = async (file: File) => {
   try {

@@ -43,8 +43,8 @@ export const BOTTOMBAR_LINKS = [
     label: "History",
   },
   {
-    imgURL: "/assets/icons/profile.svg",
+    imgURL: "/assets/icons/settings.svg",
     route: "/profile/1",
-    label: "Profile",
+    label: "Settings",
   },
 ];

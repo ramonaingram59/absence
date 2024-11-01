@@ -8,7 +8,7 @@ import Loader from './components/shared/Loader'
 
 const SigninForm = lazy(() => import('./_auth/forms/SigninForm'));
 const SignupForm = lazy(() => import('./_auth/forms/SignupForm'));
-const Home = lazy(() => import('./_root/pages/Home'));
+const Home = lazy(() => import('./_root/pages/Home/Home'));
 const Explore = lazy(() => import('./_root/pages/Explore'));
 const Saved = lazy(() => import('./_root/pages/Saved'));
 const AllUsers = lazy(() => import('./_root/pages/AllUsers'));

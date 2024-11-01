@@ -69,6 +69,24 @@ export type Database = {
           },
         ]
       }
+      Departement: {
+        Row: {
+          createdAt: string
+          id: string
+          name: string
+        }
+        Insert: {
+          createdAt: string
+          id?: string
+          name: string
+        }
+        Update: {
+          createdAt?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       FaceData: {
         Row: {
           createdAt: string
@@ -135,19 +153,22 @@ export type Database = {
       }
       UnknownFaceRecord: {
         Row: {
-          faceData: string | null
+          faceDescriptor: Json | null
+          faceImage: string | null
           id: string
           notes: string | null
           timestamp: string | null
         }
         Insert: {
-          faceData?: string | null
+          faceDescriptor?: Json | null
+          faceImage?: string | null
           id?: string
           notes?: string | null
           timestamp?: string | null
         }
         Update: {
-          faceData?: string | null
+          faceDescriptor?: Json | null
+          faceImage?: string | null
           id?: string
           notes?: string | null
           timestamp?: string | null
@@ -164,8 +185,11 @@ export type Database = {
           imageId: string | null
           imageUrl: string | null
           name: string | null
+          NIK: number | null
           password: string | null
+          position: string | null
           role: string | null
+          status: string | null
           updatedAt: string | null
         }
         Insert: {
@@ -177,8 +201,11 @@ export type Database = {
           imageId?: string | null
           imageUrl?: string | null
           name?: string | null
+          NIK?: number | null
           password?: string | null
+          position?: string | null
           role?: string | null
+          status?: string | null
           updatedAt?: string | null
         }
         Update: {
@@ -190,11 +217,22 @@ export type Database = {
           imageId?: string | null
           imageUrl?: string | null
           name?: string | null
+          NIK?: number | null
           password?: string | null
+          position?: string | null
           role?: string | null
+          status?: string | null
           updatedAt?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "Users_departement_fkey"
+            columns: ["departement"]
+            isOneToOne: false
+            referencedRelation: "Departement"
+            referencedColumns: ["name"]
+          },
+        ]
       }
     }
     Views: {

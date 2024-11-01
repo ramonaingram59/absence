@@ -1,7 +1,7 @@
-import { INewUser, ROLE } from "@/types";
-import { supabase } from "../supabase/connect";
-import { avatars } from "../config";
-import { bcryptPasswordHash } from "../utils";
+import { INewUser, ROLE, User } from "@/types";
+import { supabase } from "../../supabase/connect";
+import { avatars } from "../../config";
+import { bcryptPasswordHash } from "../../utils";
 
 export const createUserAccount = async (user: INewUser) => {
   try {
@@ -54,7 +54,7 @@ export const saveUserToDB = async (user: {
           departement: user?.departement,
           imageUrl: user?.imageUrl,
           role: ROLE.USER,
-          password: hashedPassword
+          password: hashedPassword,
         },
       ])
       .select();
@@ -106,7 +106,7 @@ export const signInAccount = async (user: {
   }
 };
 
-export async function getAccount() {
+export const getAccount = async () => {
   try {
     const currentAccount = await supabase.auth.getSession();
     console.log(currentAccount, "currentAccount");
@@ -127,7 +127,8 @@ export const getCurrentUser = async () => {
     let { data: currentUser, error } = await supabase
       .from("Users")
       .select("*")
-      .eq("authId", currentAccount?.data?.session?.user?.id!);
+      .eq("authId", currentAccount?.data?.session?.user?.id!)
+      .returns<User[]>()
 
     if (!currentUser || error) throw Error;
 
