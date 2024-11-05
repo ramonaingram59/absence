@@ -1,5 +1,6 @@
 export { default as Home } from "./Home/Home"
-export { default as Explore } from "./Explore"
+export { default as Explore } from "./History/History"
+export { default as Settings } from "./Settings/Settings"
 export { default as AllUsers } from "./AllUsers"
 export { default as CreatePost } from "./CreatePost"
 export { default as EditPost } from "./EditPost"

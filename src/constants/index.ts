@@ -5,24 +5,19 @@ export const SIDEBAR_LINKS = [
     label: "Home",
   },
   {
-    imgURL: "/assets/icons/wallpaper.svg",
-    route: "/explore",
-    label: "Explore",
+    imgURL: "/assets/icons/face-scan.svg",
+    route: "/scan",
+    label: "Scan",
   },
   {
-    imgURL: "/assets/icons/people.svg",
-    route: "/all-users",
-    label: "People",
+    imgURL: "/assets/icons/log.svg",
+    route: "/history",
+    label: "History",
   },
   {
-    imgURL: "/assets/icons/bookmark.svg",
-    route: "/saved",
-    label: "Saved",
-  },
-  {
-    imgURL: "/assets/icons/gallery-add.svg",
-    route: "/create-post",
-    label: "Create Post",
+    imgURL: "/assets/icons/settings.svg",
+    route: "/settings",
+    label: "Settings",
   },
 ];
 
@@ -34,17 +29,17 @@ export const BOTTOMBAR_LINKS = [
   },
   {
     imgURL: "/assets/icons/face-scan.svg",
-    route: "/saved",
+    route: "/scan",
     label: "Scan",
   },
   {
     imgURL: "/assets/icons/log.svg",
-    route: "/explore",
+    route: "/history",
     label: "History",
   },
   {
     imgURL: "/assets/icons/settings.svg",
-    route: "/profile/1",
+    route: "/settings",
     label: "Settings",
   },
 ];

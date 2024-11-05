@@ -44,7 +44,7 @@ const PostDetails = () => {
                       <p className="base-medium lg:body-bold text-light-1 max-w-32 line-clamp-1">
                         {post?.creator.name}
                       </p>
-                      <div className="flex-center gap-2 text-light-3">
+                      <div className="flex justify-center items-center gap-2 text-light-3">
                         <p className="subtle-semibold lg:small-regular">
                           {timeAgo(post?.createdAt!)}
                         </p>
@@ -56,7 +56,7 @@ const PostDetails = () => {
                     </div>
                   </Link>
 
-                  <div className="flex-center">
+                  <div className="flex justify-center items-center">
                     <Link
                       to={`/update-post/${post?.id}`}
                       className={

@@ -5,7 +5,7 @@ import { toast } from "../ui/use-toast";
 
 type FileUploaderProps = {
   fieldChange: (FILES: File[]) => void;
-  mediaUrl: string
+  mediaUrl?: string
 }
 
 const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
@@ -31,7 +31,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
   })
 
   return (
-    <div {...getRootProps()} className="flex flex-center flex-col bg-dark-3 rounded-xl cursor-pointer">
+    <div {...getRootProps()} className="flex justify-center items-center flex-col bg-dark-3 rounded-xl cursor-pointer">
       <input {...getInputProps()} className="cursor-pointer" />
       {
         fileUrl ?
@@ -41,14 +41,14 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
                 <img
                   src={fileUrl}
                   alt="upload-image"
-                  className="file_uploader-img"
+                  className="h-80 lg:h-[480px] w-full rounded-[24px] object-cover object-top"
                 />
               </div>
-              <p className="file_uploader-label">Click or drag photo to replace</p>
+              <p className="text-muted-foreground text-center small-regular w-full p-4 border-t border-t-dark-4">Click or drag photo to replace</p>
             </>
           )
           :
-          (<div className="file_uploader-box">
+          (<div className="flex justify-center items-center flex-col p-7 h-80 lg:h-[612px]">
             <img
               src="/assets/icons/file-upload.svg"
               alt="upload"
@@ -56,10 +56,10 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
               height={72}
             />
 
-            <h3 className="base-medium text-light-2 mb-2 mt-6">Drag photo here</h3>
-            <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
+            <h3 className="base-medium text-muted-foreground mb-2 mt-6">Drag photo here</h3>
+            <p className="text-muted-foreground text-xs mb-6">jpg, jpeg, png, svg</p>
 
-            <Button className="shad-button_dark_4 hover:invert-dark">
+            <Button variant="secondary">
               Select from computer
             </Button>
           </div>)

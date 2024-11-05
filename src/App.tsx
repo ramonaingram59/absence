@@ -9,7 +9,11 @@ import Loader from './components/shared/Loader'
 const SigninForm = lazy(() => import('./_auth/forms/SigninForm'));
 const SignupForm = lazy(() => import('./_auth/forms/SignupForm'));
 const Home = lazy(() => import('./_root/pages/Home/Home'));
-const Explore = lazy(() => import('./_root/pages/Explore'));
+const History = lazy(() => import('./_root/pages/History/History'));
+const Settings = lazy(() => import('./_root/pages/Settings/Settings'));
+const RegisterFace = lazy(() => import('./_root/pages/Settings/pages/RegisterFace'));
+const UnknownFace = lazy(() => import('./_root/pages/Settings/pages/UnknownFace'));
+const UsersSettings = lazy(() => import('./_root/pages/Settings/pages/UsersSettings'));
 const Saved = lazy(() => import('./_root/pages/Saved'));
 const AllUsers = lazy(() => import('./_root/pages/AllUsers'));
 const CreatePost = lazy(() => import('./_root/pages/CreatePost'));
@@ -35,13 +39,17 @@ const App = () => {
           {/* PRIVATE */}
           <Route element={<RootLayout />}>
             <Route index element={<Home />} />
-            <Route path='/explore' element={<Explore />} />
-            <Route path='/saved' element={<Saved />} />
+            <Route path='/history' element={<History />} />
+            <Route path='/scan' element={<Saved />} />
             <Route path='/all-users' element={<AllUsers />} />
             <Route path='/create-post' element={<CreatePost />} />
             <Route path='/update-post/:id' element={<EditPost />} />
             <Route path='/posts/:id' element={<PostDetails />} />
             <Route path='/profile/:id/*' element={<Profile />} />
+            <Route path='/settings' element={<Settings />} />
+            <Route path='/settings/faces' element={<RegisterFace />} />
+            <Route path='/settings/users' element={<UsersSettings />} />
+            <Route path='/settings/unknown-faces' element={<UnknownFace />} />
             <Route path='/update-profile/:id' element={<UpdateProfile />} />
           </Route>
 

@@ -56,7 +56,7 @@ const SigninForm = () => {
 
   return (
     <Form {...form}>
-      <div className="sm:w-420 flex-center flex-col">
+      <div className="sm:w-420 flex justify-center items-center flex-col">
         <div className="flex flex-row gap-2">
           <img src="/assets/image/side-img.gif" alt="logo" className="w-8 h-8" />
           <h2 className="text-2xl italic font-semibold text-primary">IFCAbsence</h2>

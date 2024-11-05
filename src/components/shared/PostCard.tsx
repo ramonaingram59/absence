@@ -28,7 +28,7 @@ const PostCard = ({ post }: { post: any }) => {
             <p className="base-medium lg:body-bold text-light-1 line-clamp-1 max-w-52">
               {post?.creator.name}
             </p>
-            <div className="gap-2 flex-center text-light-3">
+            <div className="gap-2 flex justify-center items-center text-light-3">
               <p className="subtle-semibold lg:small-regular">
                 {timeAgo(post?.createdAt)}
               </p>

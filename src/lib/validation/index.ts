@@ -18,3 +18,9 @@ export const PostValidation = z.object({
   location: z.string().min(5).max(200, { message: 'Location is too long.' }),
   tags: z.string().min(5).max(200, { message: 'Tags is too long.' }),
 })
+
+
+export const RegisterFileUpload = z.object({
+  file: z.custom<File[]>(),
+  fullName: z.string().min(4, { message: 'Full Name is too short.' }).max(100, { message: 'Name is too long.' }),
+})

@@ -19,9 +19,7 @@ import { Textarea } from "../ui/textarea";
 //   useUpdatePost,
 // } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
-import { toast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import Loader from "@/components/shared/Loader";
 // import { PostWithUser } from "@/types";
 
 type PostFormProps = {
@@ -165,7 +163,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
             className="capitalize shad-button_primary whitespace-nowrap hover:invert-dark"
           >
             {/* {isCreatingPost || isLoadingUpdate ? (
-              <div className="gap-2 flex-center">
+              <div className="gap-2 flex justify-center items-center">
                 <Loader /> Loading...
               </div>
             ) : (
