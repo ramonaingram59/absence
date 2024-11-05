@@ -1,11 +1,10 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { format, parseISO } from 'date-fns'
-import moment from 'moment'
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
+import { type ClassValue, clsx } from "clsx";
+import { format } from "date-fns";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export const timeAgo = (timestamp: string) => {
@@ -21,29 +20,31 @@ export const timeAgo = (timestamp: string) => {
   if (diffSeconds < 60) {
     return "Just now";
   } else if (diffMinutes < 60) {
-    return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`;
+    return `${diffMinutes} minute${diffMinutes === 1 ? "" : "s"} ago`;
   } else if (diffHours < 24) {
-    return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+    return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
   } else if (diffDays === 1) {
     return "1 day ago";
   } else {
     return `${diffDays} days ago`;
   }
-}
-
+};
 
 export const checkIsLiked = (likeList: string[], userId: string) => {
-  return likeList.includes(userId)
-}
+  return likeList.includes(userId);
+};
 
 export const bcryptPasswordHash = async (password: string) => {
-  const salt = await bcrypt.genSalt(10)
-  const hashedPassword = await bcrypt.hash(password, salt)
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-  return hashedPassword
-}
-
+  return hashedPassword;
+};
 
 export const formatDate = (date: Date) => {
-  return date ? format(date, 'eeee, dd MMM yyyy') : '-'
-}
+  return date ? format(date, "eeee, dd MMM yyyy") : "-";
+};
+
+export const formatTime = (date: Date) => {
+  return date ? format(date, "HH:mm") : "-";
+};

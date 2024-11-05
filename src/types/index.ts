@@ -9,9 +9,9 @@ export type INewUser = {
 };
 
 export type IContextType = {
-  user: IUser;
+  user: User;
   isLoading: boolean;
-  setUser: React.Dispatch<React.SetStateAction<IUser>>;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
@@ -52,13 +52,15 @@ export type IUpdatePost = {
 
 export type User = Database["public"]["Tables"]["Users"]["Row"];
 export type FaceData = Database["public"]["Tables"]["FaceData"]["Row"];
-export type AttendanceRecord = Database["public"]["Tables"]["AttendanceRecord"]["Row"];
+export type AttendanceRecord =
+  Database["public"]["Tables"]["AttendanceRecord"]["Row"];
 export type Departement = Database["public"]["Tables"]["Departement"]["Row"];
-export type RoomEntryRecord = Database["public"]["Tables"]["RoomEntryRecord"]["Row"];
-export type UnknownFaceRecord = Database["public"]["Tables"]["UnknownFaceRecord"]["Row"];
-
+export type RoomEntryRecord =
+  Database["public"]["Tables"]["RoomEntryRecord"]["Row"];
+export type UnknownFaceRecord =
+  Database["public"]["Tables"]["UnknownFaceRecord"]["Row"];
 
 export enum ROLE {
-  ADMIN = 'admin',
-  USER = 'user'
+  ADMIN = "admin",
+  USER = "user",
 }

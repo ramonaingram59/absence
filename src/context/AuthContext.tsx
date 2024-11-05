@@ -1,64 +1,79 @@
-import { getCurrentUser } from '@/lib/actions/api/auth'
-import { IContextType, IUser } from '@/types'
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { getCurrentUser } from "@/lib/actions/api/auth";
+import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutations";
+import { IContextType, User } from "@/types";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const INITIAL_USER = {
-  id: '',
-  name: '',
-  departement: '',
-  email: '',
-  imageUrl: '',
-  bio: ''
-} 
+  id: "",
+  name: "",
+  departement: "",
+  email: "",
+  authId: "",
+  imageUrl: "",
+  role: "",
+  password: "",
+  imageId: "",
+  NIK: null,
+  position: "",
+  status: "",
+  createdAt: "",
+  updatedAt: "",
+};
 
 export const INITIAL_STATE = {
   user: INITIAL_USER,
   isLoading: false,
   isAuthenticated: false,
-  setUser: () => { },
-  setIsAuthenticated: () => { },
+  setUser: () => {},
+  setIsAuthenticated: () => {},
   checkAuthUser: async () => false as boolean,
-}
+};
 
-const AuthContext = createContext<IContextType>(INITIAL_STATE)
+const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUser>(INITIAL_USER)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState<User>(INITIAL_USER);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const checkAuthUser = async () => {
     try {
-      const currentAccount = await getCurrentUser()
-
+      // const { data: currentAccount } = useGetCurrentUser();
+      const currentAccount = await getCurrentUser();
       if (currentAccount) {
         setUser({
           id: currentAccount.id,
-          name: currentAccount.name!,
-          departement: currentAccount.departement!,
+          name: currentAccount.name,
+          departement: currentAccount.departement,
           email: currentAccount.email,
-          imageUrl: currentAccount.imageUrl!,
-          bio: ''
-        })
+          authId: currentAccount.authId,
+          imageUrl: currentAccount.imageUrl,
+          role: currentAccount.role,
+          password: null,
+          imageId: currentAccount.imageId,
+          NIK: currentAccount.NIK,
+          position: currentAccount.position,
+          status: currentAccount.status,
+          createdAt: currentAccount.createdAt,
+          updatedAt: currentAccount.updatedAt,
+        });
 
-        setIsAuthenticated(true)
+        setIsAuthenticated(true);
 
-        return true
+        return true;
       }
 
-      return false
-
+      return false;
     } catch (error) {
-      console.log(error)
-      return false
-
+      console.log(error);
+      return false;
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const value = {
     user,
@@ -66,30 +81,26 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isLoading,
     isAuthenticated,
     setIsAuthenticated,
-    checkAuthUser
-  }
+    checkAuthUser,
+  };
 
   useEffect(() => {
     const cookieFallback = localStorage.getItem("cookieFallback");
 
     if (
-      cookieFallback == '[]' ||
+      cookieFallback == "[]" ||
       cookieFallback == null ||
       cookieFallback == undefined
     ) {
-      navigate('/signin')
+      navigate("/signin");
     }
 
-    checkAuthUser()
-  }, [])
+    checkAuthUser();
+  }, []);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
-}
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 
-export default AuthProvider
+export default AuthProvider;
 
-export const useUserContext = () => useContext(AuthContext)
+export const useUserContext = () => useContext(AuthContext);
