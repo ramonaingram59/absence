@@ -1,51 +1,78 @@
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import useDebounce from "@/hooks/useDebounce";
+import { cn } from "@/lib/utils";
+import { addDays, format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
+import { DateRange } from "react-day-picker";
 
 const Explore = () => {
-  const [searchValue, setSearchValue] = useState("");
-  const debounceVal = useDebounce(searchValue, 500);
+  // const [searchValue, setSearchValue] = useState("");
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), 7),
+  })
+  const debounceDate = useDebounce(date, 500);
 
 
   return (
-    <div className="explore-container">
-      <div className="explore-inner_container">
-        <h2 className="w-full h3-bold md:h2-bold">Search</h2>
+    <div className="explore-container w-full">
+      <div className="p-4">
+        <h2 className="w-full font-semibold text-xl">Riwayat Absensi</h2>
 
         <div className="flex w-full gap-1 px-4 rounded-lg bg-dark-4">
-          <img
-            src="/assets/icons/search.svg"
-            width={18}
-            height={18}
-            alt="search"
-          />
-
-          <Input
+          {/* <Input
             type="text"
             placeholder="Search.."
             className="explore-search"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-          />
+          /> */}
         </div>
-      </div>
 
-      <div className="w-full max-w-5xl mt-16 flex-between mb-7">
-        <h3 className="body-bold md:h3-bold">Populars</h3>
-
-        <div className="gap-3 px-4 py-2 cursor-pointer flex justify-center items-center bg-dark-3 rounded-xl">
-          <p className="small-medium md:base-medium text-light-2">All</p>
-          <img
-            src="/assets/icons/filter.svg"
-            width={18}
-            height={18}
-            alt="filter"
-          />
+        <div className="mt-8">
+          <Popover>
+            <PopoverTrigger asChild >
+              <Button
+                id="date"
+                variant={"outline"}
+                className={cn(
+                  "w-[300px] justify-start text-left font-normal",
+                  !date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon />
+                {date?.from ? (
+                  date.to ? (
+                    <>
+                      {format(date.from, "LLL dd, y")} -{" "}
+                      {format(date.to, "LLL dd, y")}
+                    </>
+                  ) : (
+                    format(date.from, "LLL dd, y")
+                  )
+                ) : (
+                  <span>Pick a date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={date?.from}
+                selected={date}
+                onSelect={setDate}
+                numberOfMonths={2}
+              />
+            </PopoverContent>
+          </Popover>
         </div>
+
       </div>
 
-      <div className="flex flex-wrap w-full max-w-5xl gap-9">
-      </div>
 
     </div>
   );
