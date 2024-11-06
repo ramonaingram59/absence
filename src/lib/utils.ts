@@ -41,10 +41,10 @@ export const bcryptPasswordHash = async (password: string) => {
   return hashedPassword;
 };
 
-export const formatDate = (date: Date) => {
+export const formatDate = (date: Date | string | null) => {
   return date ? format(date, "eeee, dd MMM yyyy") : "-";
 };
 
-export const formatTime = (date: Date) => {
+export const formatTime = (date: Date | string | null) => {
   return date ? format(date, "HH:mm") : "-";
 };

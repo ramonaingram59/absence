@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,16 +9,16 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useGetHistoryRecord } from "@/lib/react-query/absent/queries";
-import { formatDate } from "@/lib/utils";
-import { ROLE, User } from "@/types";
+import { cn, formatDate, formatTime } from "@/lib/utils";
+import { AttendanceRecord, ROLE, User } from "@/types";
+import { Link } from "react-router-dom";
 
-const HistoryCard = ({ user }: { user?: User }) => {
-  const isAdmin = user?.role === ROLE.ADMIN;
+interface HistoryProps {
+  user: User;
+  history?: AttendanceRecord[];
+}
 
-  // const { data, isPending } = useGetHistoryRecord(isAdmin ? '' : user?.id)
-
-  // console.log(data, 'his')
-
+const HistoryCard = ({ user, history }: HistoryProps) => {
   return (
     <div>
       <Card>
@@ -30,118 +30,48 @@ const HistoryCard = ({ user }: { user?: User }) => {
             Shift: Fixed 9 hours (08:30 - 17:30)
           </CardDescription> */}
         </CardHeader>
-
         <Separator orientation="horizontal" />
 
-        <CardContent className="py-1">
-          <div className="flex flex-row w-full gap-4">
-            <div className="flex-1">
-              <p className="text-base font-medium text-muted-foreground">
-                {formatDate(new Date())}
-              </p>
-              <div className="flex flex-row items-end gap-4">
-                <p className="text-lg font-medium">
-                  08:37
-                  {/* HEREEEE */}
-                </p>
-              </div>
-            </div>
+        {history?.map((item, idx) => (
+          <div key={idx}>
+            <CardContent className="py-1">
+              <div className="flex flex-row w-full gap-4">
+                <div className="flex-1">
+                  <p className="text-base font-medium text-muted-foreground whitespace-nowrap">
+                    {formatDate(item?.date)}
+                  </p>
+                  <div className="flex flex-row items-center gap-4 cursor-pointer">
+                    <p className="flex items-center justify-center p-1 px-2 text-lg font-medium border rounded-lg whitespace-nowrap">
+                      {item?.inTime && formatTime(item?.inTime)}
+                    </p>
+                    <span>-</span>
+                    <p className="flex items-center justify-center p-1 px-2 text-lg font-medium border rounded-lg whitespace-nowrap">
+                      {item?.outTime ? formatTime(item?.outTime) : "--:--"}
+                    </p>
+                  </div>
+                </div>
 
-            <div className="flex flex-row items-center justify-end flex-1 gap-2">
-              <p className="text-sm font-medium text-muted-foreground">
-                Sudah diproses
-              </p>
-              <div className="w-6 h-6 bg-green-400 rounded-lg">
-                <img src="/assets/icons/face-scan.svg" />
+                <div className="flex flex-row items-center justify-end flex-1 gap-2">
+                  <p className="text-sm font-medium text-muted-foreground whitespace-nowrap">
+                    Sudah diproses
+                  </p>
+                  <div className="w-6 h-6 bg-green-400 rounded-lg">
+                    <img src="/assets/icons/face-scan.svg" />
+                  </div>
+                </div>
               </div>
-            </div>
+            </CardContent>
+            <Separator orientation="horizontal" className="m-auto w-80" />
           </div>
-        </CardContent>
-        <Separator orientation="horizontal" className="m-auto w-80" />
-
-        <CardContent className="py-1">
-          <div className="flex flex-row w-full gap-4">
-            <div className="flex-1">
-              <p className="text-base font-medium text-muted-foreground">
-                {formatDate(new Date())}
-              </p>
-              <div className="flex flex-row items-end gap-4">
-                <p className="text-lg font-medium">
-                  08:37
-                  {/* HEREEEE */}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-row items-center justify-end flex-1 gap-2">
-              <p className="text-sm font-medium text-muted-foreground">
-                Sudah diproses
-              </p>
-              <div className="w-6 h-6 bg-green-400 rounded-lg">
-                <img src="/assets/icons/face-scan.svg" />
-              </div>
-            </div>
-          </div>
-        </CardContent>
-        <Separator orientation="horizontal" className="m-auto w-80" />
-
-        <CardContent className="py-1">
-          <div className="flex flex-row w-full gap-4">
-            <div className="flex-1">
-              <p className="text-base font-medium text-muted-foreground">
-                {formatDate(new Date())}
-              </p>
-              <div className="flex flex-row items-end gap-4">
-                <p className="text-lg font-medium">
-                  08:37
-                  {/* HEREEEE */}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-row items-center justify-end flex-1 gap-2">
-              <p className="text-sm font-medium text-muted-foreground">
-                Sudah diproses
-              </p>
-              <div className="w-6 h-6 bg-green-400 rounded-lg">
-                <img src="/assets/icons/face-scan.svg" />
-              </div>
-            </div>
-          </div>
-        </CardContent>
-        <Separator orientation="horizontal" className="m-auto w-80" />
-
-        <CardContent className="py-1">
-          <div className="flex flex-row w-full gap-4">
-            <div className="flex-1">
-              <p className="text-base font-medium text-muted-foreground">
-                {formatDate(new Date())}
-              </p>
-              <div className="flex flex-row items-end gap-4">
-                <p className="text-lg font-medium">
-                  08:37
-                  {/* HEREEEE */}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-row items-center justify-end flex-1 gap-2">
-              <p className="text-sm font-medium text-muted-foreground">
-                Sudah diproses
-              </p>
-              <div className="w-6 h-6 bg-green-400 rounded-lg">
-                <img src="/assets/icons/face-scan.svg" />
-              </div>
-            </div>
-          </div>
-        </CardContent>
-
-        <Separator orientation="horizontal" className="m-auto w-80" />
+        ))}
 
         <CardFooter className="flex items-center justify-center w-full py-4">
-          <Button className="w-full" variant={"ghost"}>
+          <Link
+            to={"/history"}
+            className={cn(buttonVariants({ variant: "ghost" }), "min-w-48")}
+          >
             View All
-          </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>

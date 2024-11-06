@@ -33,14 +33,15 @@ const Explore = () => {
     from: new Date(),
     to: addDays(new Date(), 7),
   });
-  const debounceDate = useDebounce(date, 500);
+  const debounceDate = useDebounce(date, 1000);
 
   const { user, isLoading: isUserLoading } = useUserContext();
 
   const isAdmin = user?.role === ROLE.ADMIN;
 
   const { data: history, isPending: isHistoryLoading } = useGetHistoryRecord(
-    isAdmin ? "" : user?.id
+    isAdmin ? "" : user?.id,
+    debounceDate
   );
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const Explore = () => {
       }
       return prevData;
     });
-  }, [user, history]);
+  }, [user, history, debounceDate]);
 
   return (
     <div className="w-full explore-container">
@@ -95,11 +96,11 @@ const Explore = () => {
                 {date?.from ? (
                   date.to ? (
                     <>
-                      {format(date.from, "LLL dd, y")} -{" "}
-                      {format(date.to, "LLL dd, y")}
+                      {format(date.from, "MMM dd, y")} -{" "}
+                      {format(date.to, "MMM dd, y")}
                     </>
                   ) : (
-                    format(date.from, "LLL dd, y")
+                    format(date.from, "MMM dd, y")
                   )
                 ) : (
                   <span>Pick a date</span>

@@ -1,5 +1,4 @@
 import { getCurrentUser } from "@/lib/actions/api/auth";
-import { useGetCurrentUser } from "@/lib/react-query/queriesAndMutations";
 import { IContextType, User } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +40,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const checkAuthUser = async () => {
     try {
-      // const { data: currentAccount } = useGetCurrentUser();
       const currentAccount = await getCurrentUser();
       if (currentAccount) {
         setUser({

@@ -1,14 +1,12 @@
 import { getHistoryRecord } from "@/lib/actions/api/absent";
-import {
-  useQuery
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../queryKey";
+import { DateRange } from "react-day-picker";
 
-
-export const useGetHistoryRecord = (userId?: string) => {
+export const useGetHistoryRecord = (userId?: string, range?: DateRange) => {
   return useQuery({
-    queryFn: () => getHistoryRecord(userId),
-    queryKey: [QUERY_KEYS.GET_HISTORY_RECORD, userId],
+    queryFn: () => getHistoryRecord(userId, range),
+    queryKey: [QUERY_KEYS.GET_HISTORY_RECORD, userId, range],
     refetchOnWindowFocus: false,
   });
 };

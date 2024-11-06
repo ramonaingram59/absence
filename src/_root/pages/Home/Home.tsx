@@ -2,13 +2,19 @@ import Loader from "@/components/shared/Loader";
 import TodayCard from "./TodayCard";
 import HistoryCard from "./HistoryCard";
 import { useUserContext } from "@/context/AuthContext";
+import { ROLE } from "@/types";
+import { useGetHistoryRecord } from "@/lib/react-query/absent/queries";
 
 const Home = () => {
   const { user, isLoading: isUserLoading } = useUserContext();
 
-  console.log(user, "user");
+  const isAdmin = user?.role === ROLE.ADMIN;
 
-  if (isUserLoading) return <Loader />;
+  const { data: history, isPending: isHistoryLoading } = useGetHistoryRecord(
+    isAdmin ? "" : user?.id
+  );
+
+  if (isUserLoading || isHistoryLoading) return <Loader />;
 
   return (
     <div className="flex flex-col flex-1 px-4">
@@ -25,7 +31,7 @@ const Home = () => {
 
       <TodayCard />
 
-      {user && <HistoryCard user={user} />}
+      {user && <HistoryCard user={user} history={history} />}
     </div>
   );
 };
