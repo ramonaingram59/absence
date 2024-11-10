@@ -1,7 +1,7 @@
-import { Face } from "@/types";
+import { FaceData } from "@/types";
 import * as faceapi from "face-api.js";
-import { RefObject } from "react"
-import Webcam from "react-webcam"
+import { RefObject } from "react";
+import Webcam from "react-webcam";
 
 export const detectSingleFace = async (video: HTMLVideoElement) => {
   let detection = await faceapi
@@ -9,8 +9,8 @@ export const detectSingleFace = async (video: HTMLVideoElement) => {
     .withFaceLandmarks()
     .withFaceDescriptor();
 
-  return detection
-}
+  return detection;
+};
 
 export const detectManyFace = async (video: HTMLVideoElement) => {
   const detectionsManyFace = await faceapi
@@ -18,15 +18,17 @@ export const detectManyFace = async (video: HTMLVideoElement) => {
     .withFaceLandmarks()
     .withFaceDescriptors();
 
-  return detectionsManyFace
-}
+  return detectionsManyFace;
+};
 
-
-export const checkFaceDetection = async (descriptor: Float32Array, facesData: Face[] | null) => {
-  let bestMatch: string | null = null;
+export const checkFaceDetection = async (
+  descriptor: Float32Array,
+  facesData: FaceData[] | null
+): Promise<FaceData | null> => {
+  let bestMatch: FaceData | null = null;
   let smallestDistance = Infinity;
 
-  facesData?.forEach((face: Face) => {
+  facesData?.forEach((face: FaceData) => {
     const savedDescriptor = new Float32Array(
       JSON.parse(face.descriptor as string)
     );
@@ -35,29 +37,25 @@ export const checkFaceDetection = async (descriptor: Float32Array, facesData: Fa
 
     if (distance < smallestDistance) {
       smallestDistance = distance;
-      bestMatch = face.name;
+      bestMatch = face;
     }
   });
 
   const THRESHOLD = 0.5;
   if (smallestDistance < THRESHOLD && bestMatch) {
-    return bestMatch
+    return bestMatch;
   } else {
-    return ""
+    return null;
   }
 };
-
 
 export const handleDrawCanvas = (
   canvas: HTMLCanvasElement,
   detections: any,
-  displaySize: { width: number, height: number },
+  displaySize: { width: number; height: number },
   personName: string
 ) => {
-  const resizedDetections = faceapi.resizeResults(
-    detections,
-    displaySize
-  );
+  const resizedDetections = faceapi.resizeResults(detections, displaySize);
   const context = canvas.getContext("2d");
   context?.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -65,14 +63,13 @@ export const handleDrawCanvas = (
 
   const { box } = resizedDetections.detection;
   const text = personName ? personName : "Tidak dikenali";
-  new faceapi.draw.DrawTextField([text], box.bottomLeft, { fontSize: 12 }).draw(canvas);
-
-}
-
-
+  new faceapi.draw.DrawTextField([text], box.bottomLeft, { fontSize: 12 }).draw(
+    canvas
+  );
+};
 
 export const handleCapture = (videoRef: RefObject<Webcam>) => {
-  let imageBlob = videoRef?.current?.getScreenshot() ?? null
+  let imageBlob = videoRef?.current?.getScreenshot() ?? null;
 
-  return imageBlob
-}
+  return imageBlob;
+};

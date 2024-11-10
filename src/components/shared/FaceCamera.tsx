@@ -102,14 +102,13 @@ const FaceCam = () => {
             facesData
           );
 
-          setPersonName(detectedPerson);
-          handleDrawCanvas(canvas, detections, displaySize, personName);
-
           if (detectedPerson) {
+            setPersonName(detectedPerson.name);
+            handleDrawCanvas(canvas, detections, displaySize, personName);
             setFaceDetectCounter((prevCounter) => prevCounter + 1);
 
             if (faceDetectCounter + 1 >= 3) {
-              handleAbsensi();
+              handleAbsensi(detectedPerson.userId!, new Date());
             }
           }
         } else {
@@ -138,11 +137,11 @@ const FaceCam = () => {
     setImgSrc(handleCapture(videoRef));
   };
 
-  const handleAbsensi = async () => {
+  const handleAbsensi = async (userId: string, time: Date) => {
     await addRecordAtt(
       {
-        userId: personName,
-        time: new Date(),
+        userId,
+        time,
       },
       {
         onSuccess(data) {

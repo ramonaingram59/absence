@@ -48,3 +48,7 @@ export const formatDate = (date: Date | string | null) => {
 export const formatTime = (date: Date | string | null) => {
   return date ? format(date, "HH:mm") : "-";
 };
+
+export const formatOnlyDate = (date: Date | string | null) => {
+  return date ? format(date, "yyyy-MM-dd") : "-";
+};

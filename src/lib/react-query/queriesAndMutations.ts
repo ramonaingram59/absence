@@ -1,13 +1,13 @@
-import { INewPost, INewUser, IUpdatePost } from "@/types";
+import { INewUser } from "@/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { QUERY_KEYS } from "./queryKey";
-import { createUserAccount, getCurrentUser, signInAccount, signOutAccount } from "../actions/api/auth";
+  createUserAccount,
+  getCurrentUser,
+  signInAccount,
+  signOutAccount,
+} from "../actions/api/auth";
 import { allFaces, saveFaces } from "../appwrite/api";
+import { QUERY_KEYS } from "./queryKey";
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -32,32 +32,29 @@ export const useGetCurrentUser = () => {
   return useQuery({
     queryFn: getCurrentUser,
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 };
 
 export const useGetAllFaces = () => {
   return useQuery({
-    queryKey: ['GET_ALL_FACES'],
+    queryKey: ["GET_ALL_FACES"],
     queryFn: allFaces,
     refetchOnWindowFocus: false,
   });
-}
+};
 
 export const useSaveFaceDescriptors = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (descriptor: Float32Array) =>
-      saveFaces(descriptor),
+    mutationFn: (descriptor: Float32Array) => saveFaces(descriptor),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['GET_ALL_FACES'],
+        queryKey: ["GET_ALL_FACES"],
       });
     },
   });
 };
-
-
 
 // export const useCreatePost = () => {
 //   const queryClient = useQueryClient();
@@ -125,7 +122,6 @@ export const useSaveFaceDescriptors = () => {
 //   });
 // };
 
-
 // export const useDeleteSavedPost = () => {
 //   const queryClient = useQueryClient();
 //   return useMutation({
@@ -144,7 +140,6 @@ export const useSaveFaceDescriptors = () => {
 //     },
 //   });
 // };
-
 
 // export const useGetPostById = (postId: string) => {
 //   return useQuery({

@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase/connect";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatOnlyDate } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 
 export const getHistoryRecord = async (
@@ -42,7 +42,24 @@ export const getHistoryRecord = async (
 
 export const addRecordAttendance = async (userId?: string, time?: Date) => {
   try {
-    console.log("ok", userId, time);
+    if (userId && time) {
+      const dateOnly = formatOnlyDate(time);
+
+      const { data, error } = await supabase
+        .from("AttendanceRecord")
+        .insert([
+          {
+            userId: userId,
+            date: dateOnly,
+            inTime: time.toUTCString(),
+            status: "late",
+            outTime: time.toUTCString(),
+          },
+        ])
+        .select();
+
+      console.log(data, "data Ok");
+    }
 
     return true;
   } catch (error) {
