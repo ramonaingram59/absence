@@ -1,4 +1,4 @@
-import { formatDate, formatTime } from "@/lib/utils";
+import { formatDate, formatTime, formatTimeWIB } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type AttendanceRecord = {
@@ -61,7 +61,9 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
     header: () => <div className="text-center">Waktu masuk</div>,
     cell: ({ row }) => {
       const time: Date = row.getValue("inTime");
-      return <div className="font-medium text-center">{formatTime(time)}</div>;
+      return (
+        <div className="font-medium text-center">{formatTimeWIB(time)}</div>
+      );
     },
   },
   {
@@ -69,7 +71,9 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
     header: () => <div className="text-center">Waktu keluar</div>,
     cell: ({ row }) => {
       const time: Date = row.getValue("outTime");
-      return <div className="font-medium text-center">{formatTime(time)}</div>;
+      return (
+        <div className="font-medium text-center">{formatTimeWIB(time)}</div>
+      );
     },
   },
   {

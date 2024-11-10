@@ -36,6 +36,7 @@ export type Database = {
     Tables: {
       AttendanceRecord: {
         Row: {
+          createdAt: string | null
           date: string | null
           id: string
           inTime: string | null
@@ -44,6 +45,7 @@ export type Database = {
           userId: string
         }
         Insert: {
+          createdAt?: string | null
           date?: string | null
           id?: string
           inTime?: string | null
@@ -52,6 +54,7 @@ export type Database = {
           userId: string
         }
         Update: {
+          createdAt?: string | null
           date?: string | null
           id?: string
           inTime?: string | null

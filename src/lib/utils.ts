@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { type ClassValue, clsx } from "clsx";
-import { format } from "date-fns";
+import { addHours, format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -51,4 +51,22 @@ export const formatTime = (date: Date | string | null) => {
 
 export const formatOnlyDate = (date: Date | string | null) => {
   return date ? format(date, "yyyy-MM-dd") : "-";
+};
+
+export const formatDateWIB = (date: Date | string | null) => {
+  const indonesianDate = addHours(date!, 7);
+
+  return date ? format(indonesianDate, "eeee, dd MMM yyyy") : "-";
+};
+
+export const formatTimeWIB = (date: Date | string | null) => {
+  const indonesianDate = addHours(date!, 7);
+
+  return date ? format(indonesianDate, "HH:mm") : "-";
+};
+
+export const formatOnlyDateWIB = (date: Date | string | null) => {
+  const indonesianDate = addHours(date!, 7);
+
+  return date ? format(indonesianDate, "yyyy-MM-dd") : "-";
 };

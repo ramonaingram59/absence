@@ -4,10 +4,10 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn, formatDate, formatTime } from "@/lib/utils";
+import { cn, formatDate, formatTime, formatTimeWIB } from "@/lib/utils";
 import { AttendanceRecord, User } from "@/types";
 import { Link } from "react-router-dom";
 
@@ -17,8 +17,7 @@ interface HistoryProps {
 }
 
 const HistoryCard = ({ user, history }: HistoryProps) => {
-
-  console.log(user)
+  console.log(user);
   return (
     <div>
       <Card>
@@ -42,11 +41,11 @@ const HistoryCard = ({ user, history }: HistoryProps) => {
                   </p>
                   <div className="flex flex-row items-center gap-4 cursor-pointer">
                     <p className="flex items-center justify-center p-1 px-2 text-lg font-medium border rounded-lg whitespace-nowrap">
-                      {item?.inTime && formatTime(item?.inTime)}
+                      {item?.inTime && formatTimeWIB(item?.inTime)}
                     </p>
                     <span>-</span>
                     <p className="flex items-center justify-center p-1 px-2 text-lg font-medium border rounded-lg whitespace-nowrap">
-                      {item?.outTime ? formatTime(item?.outTime) : "--:--"}
+                      {item?.outTime ? formatTimeWIB(item?.outTime) : "--:--"}
                     </p>
                   </div>
                 </div>

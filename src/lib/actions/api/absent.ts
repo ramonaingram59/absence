@@ -42,9 +42,23 @@ export const getHistoryRecord = async (
 
 export const addRecordAttendance = async (userId?: string, time?: Date) => {
   try {
-    if (userId && time) {
-      const dateOnly = formatOnlyDate(time);
+    const END_SHIFT_HOUR = 17;
+    const END_SHIFT_MINUTE = 30;
 
+    if (!userId || !time) return false;
+    const dateOnly = formatOnlyDate(time);
+
+    // Cek absence today for this user
+    const { data: existingRecords, error: fetchError } = await supabase
+      .from("AttendanceRecord")
+      .select("*")
+      .eq("userId", userId)
+      .eq("date", dateOnly)
+      .order("createdAt", { ascending: true });
+
+    if (fetchError) throw fetchError;
+
+    if (existingRecords?.length == 0) {
       const { data, error } = await supabase
         .from("AttendanceRecord")
         .insert([
@@ -53,13 +67,37 @@ export const addRecordAttendance = async (userId?: string, time?: Date) => {
             date: dateOnly,
             inTime: time.toUTCString(),
             status: "late",
-            outTime: time.toUTCString(),
           },
         ])
         .select();
 
-      console.log(data, "data Ok");
+      if (error) throw error;
+      console.log("inTime record", data);
+    } else {
+      const lastRecord = existingRecords[existingRecords.length - 1];
+
+      const currentHour = time.getHours();
+      const currerntMinute = time.getMinutes();
+
+      // Check if past 17:30, for outTime
+      if (
+        !lastRecord.outTime &&
+        (currentHour > END_SHIFT_HOUR ||
+          (currentHour >= END_SHIFT_HOUR && currerntMinute >= END_SHIFT_MINUTE))
+      ) {
+        const { data, error } = await supabase
+          .from("AttendanceRecord")
+          .update({
+            outTime: time.toISOString(),
+          })
+          .eq("id", lastRecord.id);
+
+        if (error) throw error;
+        console.log("outTime record", data);
+      }
     }
+
+    console.log(existingRecords, "existingRecords Ok");
 
     return true;
   } catch (error) {
