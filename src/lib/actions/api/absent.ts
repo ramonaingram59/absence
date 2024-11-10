@@ -2,10 +2,15 @@ import { supabase } from "@/lib/supabase/connect";
 import { formatDate } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 
-export const getHistoryRecord = async (userId?: string, range?: DateRange, limit?: number) => {
+export const getHistoryRecord = async (
+  userId?: string,
+  range?: DateRange,
+  limit?: number
+) => {
   try {
-    let query = supabase.from("AttendanceRecord")
-      .select("*, Users(name, email, departement, position, role)")
+    let query = supabase
+      .from("AttendanceRecord")
+      .select("*, Users(name, email, departement, position, role)");
 
     if (userId) {
       query = query.eq("userId", userId);
@@ -17,7 +22,7 @@ export const getHistoryRecord = async (userId?: string, range?: DateRange, limit
     }
 
     if (limit) {
-      query = query.limit(limit)
+      query = query.limit(limit);
     }
 
     const { data: history, error } = await query.order("date", {
@@ -28,9 +33,20 @@ export const getHistoryRecord = async (userId?: string, range?: DateRange, limit
       console.error("Error showing attendance", error);
       return;
     }
-    console.log(history, 'history')
+    console.log(history, "history");
     return history;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const addRecordAttendance = async (userId?: string, time?: Date) => {
+  try {
+    console.log("ok", userId, time);
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 };
