@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/lib/actions/api/auth";
+import { supabase } from "@/lib/supabase/connect";
 import { IContextType, User } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -60,11 +61,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         setIsAuthenticated(true);
+        return true
+      } else {
+        setUser(INITIAL_USER)
+        setIsAuthenticated(false)
 
-        return true;
+        return false
       }
 
-      return false;
     } catch (error) {
       console.log(error);
       return false;
@@ -83,17 +87,23 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    const cookieFallback = localStorage.getItem("cookieFallback");
+    checkAuthUser();
 
-    if (
-      cookieFallback == "[]" ||
-      cookieFallback == null ||
-      cookieFallback == undefined
-    ) {
-      navigate("/signin");
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session) {
+          setIsAuthenticated(true)
+        } else {
+          setIsAuthenticated(false)
+          navigate('/signin')
+        }
+      }
+    )
+
+    return () => {
+      listener.subscription.unsubscribe()
     }
 
-    checkAuthUser();
   }, []);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

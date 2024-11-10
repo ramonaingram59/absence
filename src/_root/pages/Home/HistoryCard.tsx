@@ -1,16 +1,14 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useGetHistoryRecord } from "@/lib/react-query/absent/queries";
 import { cn, formatDate, formatTime } from "@/lib/utils";
-import { AttendanceRecord, ROLE, User } from "@/types";
+import { AttendanceRecord, User } from "@/types";
 import { Link } from "react-router-dom";
 
 interface HistoryProps {
@@ -19,6 +17,8 @@ interface HistoryProps {
 }
 
 const HistoryCard = ({ user, history }: HistoryProps) => {
+
+  console.log(user)
   return (
     <div>
       <Card>

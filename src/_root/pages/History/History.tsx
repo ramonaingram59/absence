@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { DataTable } from "./DataTable/data-table";
 import { AttendanceRecord, columns } from "./DataTable/columns";
+import Loader from "@/components/shared/Loader";
 
 // interface IHistory {
 //   id: string ;
@@ -54,7 +55,7 @@ const Explore = () => {
       inTime: item.inTime,
       outTime: item.outTime,
       status: item.status,
-      fullName: user?.name || "",
+      fullName: item.Users?.name ?? '',
     }));
 
     setData((prevData) => {
@@ -65,6 +66,7 @@ const Explore = () => {
     });
   }, [user, history, debounceDate]);
 
+  if (isUserLoading || isHistoryLoading) return <Loader />;
   return (
     <div className="w-full explore-container">
       <div className="p-4">

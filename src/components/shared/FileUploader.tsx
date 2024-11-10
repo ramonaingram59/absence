@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { Button } from "../ui/button";
-import { toast } from "../ui/use-toast";
+import { toast } from "sonner";
 
 type FileUploaderProps = {
   fieldChange: (FILES: File[]) => void;
@@ -27,7 +27,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
       "image/*": [".png", ".jpeg", ".jpg", ".svg"],
     },
     onError() {
-      toast({ title: "Failed to upload image." });
+      toast.error("Failed to upload image.");
     },
   });
 

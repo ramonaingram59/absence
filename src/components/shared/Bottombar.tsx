@@ -1,19 +1,27 @@
 import { BOTTOMBAR_LINKS } from '@/constants'
-import { INavLink } from '@/types'
+import { useUserContext } from '@/context/AuthContext'
+import { cn } from '@/lib/utils'
+import { INavLink, ROLE } from '@/types'
 import { NavLink, useLocation } from 'react-router-dom'
 
 const Bottombar = () => {
   const { pathname } = useLocation()
+  const { user } = useUserContext()
 
   return (
     <section className='fixed z-50 flex justify-between items-center w-full bottom-0 rounded-t-[20px] px-5 py-4 md:hidden bg-green-700 text-white'>
       {BOTTOMBAR_LINKS.map((link: INavLink) => {
         let isActive = pathname === link.route
-        return <NavLink
+        const isAllow = user.role === ROLE.ADMIN || link.role === user.role;
+
+        return (<NavLink
           to={link.route}
           key={link.label}
-          className={`${isActive && 'bg-green-50 rounded-[10px] text-black'} 
-          flex justify-center items-center flex-col gap-1 p-2 transition`}
+          className={cn(
+            isActive && 'bg-green-50 rounded-[10px] text-black',
+            'flex justify-center items-center flex-col gap-1 p-2 transition',
+            !isAllow && 'hidden',
+          )}
         >
           <img
             src={link.imgURL}
@@ -25,7 +33,7 @@ const Bottombar = () => {
           <p className={`${isActive && 'hidden'} text-sm text-light-2`}>
             {link.label}
           </p>
-        </NavLink>
+        </NavLink>)
       })}
     </section>
   )

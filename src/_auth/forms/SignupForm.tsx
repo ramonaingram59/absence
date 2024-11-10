@@ -9,17 +9,15 @@ import { Input } from "@/components/ui/input"
 import { SignupValidation } from "@/lib/validation"
 import Loader from "@/components/shared/Loader"
 import { Link, useNavigate } from "react-router-dom"
-import { useToast } from "@/components/ui/use-toast"
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
-import { ToastAction } from "@/components/ui/toast"
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { checkRegisteredUser } from "@/lib/actions/api/auth"
 
 
 
 const SignupForm = () => {
-  const { toast } = useToast()
   const { checkAuthUser } = useUserContext()
   const navigate = useNavigate()
 
@@ -45,9 +43,8 @@ const SignupForm = () => {
       email: values.email
     })
     if (registeredUser && registeredUser.length > 0) {
-      return toast({
-        title: 'This email or username is already registered. Please sign in instead.',
-        action: <ToastAction altText="Sign in" onClick={() => navigate('/signin')}>Go to Sign in</ToastAction>
+      return toast('This email or username is already registered. Please sign in instead.', {
+        action: <div onClick={() => navigate('/signin')}>Go to Sign in</div>
       })
     }
 
@@ -55,7 +52,7 @@ const SignupForm = () => {
     const newUser = await createUserAccount(values)
 
     if (!newUser) {
-      toast({ title: 'Sign up failed. Please try again' })
+      toast.error('Sign up failed. Please try again')
 
       return;
     }
@@ -67,9 +64,9 @@ const SignupForm = () => {
 
     if (session?.error?.code === 'email_not_confirmed') {
       reset()
-      return toast({ title: 'A verification link has already been sent. Please check your email inbox.' });
+      return toast.success('A verification link has already been sent. Please check your email inbox.');
     } else if (!!session?.error) {
-      return toast({ title: 'Sign in failed. Please try again' })
+      return toast.error('Sign in failed. Please try again')
     }
 
     const isLoggedIn = await checkAuthUser()
@@ -78,7 +75,7 @@ const SignupForm = () => {
       reset()
       navigate('/')
     } else {
-      return toast({ title: 'Sign up failed. Please try again' })
+      return toast.error('Sign up failed. Please try again')
     }
   }
 

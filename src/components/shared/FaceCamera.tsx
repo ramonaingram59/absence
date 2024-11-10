@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as faceapi from "face-api.js";
 import { Button } from "../ui/button";
-import { toast } from "../ui/use-toast";
-import { Face } from "@/types";
+import { toast } from "sonner";
+import { FaceData } from "@/types";
 import {
   useGetAllFaces,
   useSaveFaceDescriptors,
@@ -23,7 +23,7 @@ const FaceCam = () => {
   const [detectedFace, setDetectedFace] = useState<Float32Array | null>(null);
   const [isDetecting, setIsDetecting] = useState(false);
   const [isFaceSaved, setIsFaceSaved] = useState(false);
-  const [facesData, setFacesData] = useState<Face[] | null>(null);
+  const [facesData, setFacesData] = useState<FaceData[] | null>(null);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   let personName: string = ''
 
@@ -137,9 +137,9 @@ const FaceCam = () => {
     if (detectedFace && !isFaceSaved) {
       await saveFaces(detectedFace);
       setIsFaceSaved(true);
-      toast({ title: "Face saved successfully!" });
+      toast.success("Face saved successfully!");
     } else {
-      toast({ title: "No face detected to save." });
+      toast.error("No face detected to save.");
     }
   };
 

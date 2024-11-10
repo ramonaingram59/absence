@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import './global.css'
 import AuthLayout from './_auth/AuthLayout'
 import RootLayout from './_root/RootLayout'
-import { Toaster } from './components/ui/toaster'
+import { Toaster } from 'sonner'
 import { lazy, Suspense } from 'react'
 import Loader from './components/shared/Loader'
 
@@ -14,7 +14,7 @@ const Settings = lazy(() => import('./_root/pages/Settings/Settings'));
 const RegisterFace = lazy(() => import('./_root/pages/Settings/pages/RegisterFace'));
 const UnknownFace = lazy(() => import('./_root/pages/Settings/pages/UnknownFace'));
 const UsersSettings = lazy(() => import('./_root/pages/Settings/pages/UsersSettings'));
-const Saved = lazy(() => import('./_root/pages/Saved'));
+const Scan = lazy(() => import('./_root/pages/Scan/Scan'));
 const AllUsers = lazy(() => import('./_root/pages/AllUsers'));
 const CreatePost = lazy(() => import('./_root/pages/CreatePost'));
 const EditPost = lazy(() => import('./_root/pages/EditPost'));
@@ -39,8 +39,9 @@ const App = () => {
           {/* PRIVATE */}
           <Route element={<RootLayout />}>
             <Route index element={<Home />} />
+            <Route path='/home' element={<Home />} />
             <Route path='/history' element={<History />} />
-            <Route path='/scan' element={<Saved />} />
+            <Route path='/scan' element={<Scan />} />
             <Route path='/all-users' element={<AllUsers />} />
             <Route path='/create-post' element={<CreatePost />} />
             <Route path='/update-post/:id' element={<EditPost />} />
@@ -55,7 +56,7 @@ const App = () => {
 
         </Routes>
       </Suspense>
-      <Toaster />
+      <Toaster position='top-right' richColors closeButton />
     </main>
   )
 }

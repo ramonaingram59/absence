@@ -2,16 +2,15 @@ import Loader from "@/components/shared/Loader";
 import TodayCard from "./TodayCard";
 import HistoryCard from "./HistoryCard";
 import { useUserContext } from "@/context/AuthContext";
-import { ROLE } from "@/types";
 import { useGetHistoryRecord } from "@/lib/react-query/absent/queries";
 
 const Home = () => {
   const { user, isLoading: isUserLoading } = useUserContext();
 
-  const isAdmin = user?.role === ROLE.ADMIN;
-
   const { data: history, isPending: isHistoryLoading } = useGetHistoryRecord(
-    isAdmin ? "" : user?.id
+    user?.id,
+    undefined,
+    5
   );
 
   if (isUserLoading || isHistoryLoading) return <Loader />;

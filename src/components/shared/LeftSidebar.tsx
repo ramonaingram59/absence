@@ -1,10 +1,11 @@
 import { SIDEBAR_LINKS } from '@/constants'
 import { useUserContext } from '@/context/AuthContext'
 import { useSignOutAccount } from '@/lib/react-query/queriesAndMutations'
-import { INavLink } from '@/types'
+import { INavLink, ROLE } from '@/types'
 import { useEffect } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button'
+import { cn } from '@/lib/utils'
 
 
 const LeftSidebar = () => {
@@ -55,26 +56,31 @@ const LeftSidebar = () => {
         <ul className='flex flex-col gap-1'>
           {SIDEBAR_LINKS.map((link: INavLink) => {
             let isActive = pathname === link.route
+            const isAllow = user.role === ROLE.ADMIN || link.role === user.role;
 
-            return <li
-              key={link.label}
-              className={`rounded-lg hover:bg-green-300 transition group 
-                ${isActive && 'bg-green-300'}`}
-            >
-              <NavLink
-                to={link.route}
-                className="flex gap-4 items-center p-4"
+            return (
+              <li
+                key={link.label}
+                className={cn(
+                  'rounded-lg hover:bg-green-300 transition group',
+                  isActive && 'bg-green-300',
+                  !isAllow && 'hidden')}
               >
-                <img
-                  src={link.imgURL}
-                  alt={link.label}
-                  className={
-                    `group-hover:invert group-hover:brightness-0 brightness-50 group-hover:transition h-5 w-5
+                <NavLink
+                  to={link.route}
+                  className="flex gap-4 items-center p-4"
+                >
+                  <img
+                    src={link.imgURL}
+                    alt={link.label}
+                    className={
+                      `group-hover:invert group-hover:brightness-0 brightness-50 group-hover:transition h-5 w-5
                     ${isActive && 'invert brightness-0 transition'} `}
-                />
-                {link.label}
-              </NavLink>
-            </li>
+                  />
+                  {link.label}
+                </NavLink>
+              </li>
+            )
           })}
 
         </ul>
