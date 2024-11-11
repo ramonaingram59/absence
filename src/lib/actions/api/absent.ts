@@ -42,8 +42,27 @@ export const getHistoryRecord = async (
 
 export const addRecordAttendance = async (userId?: string, time?: Date) => {
   try {
+    const START_SHIFT_HOUR = 8;
+    const START_SHIFT_MINUTE = 30;
     const END_SHIFT_HOUR = 17;
     const END_SHIFT_MINUTE = 30;
+    let status
+
+    if (time) {
+      let currentHour = time.getHours();
+      let currentMinute = time.getMinutes();
+
+      if (
+        (currentHour < START_SHIFT_HOUR ||
+          (currentHour <= START_SHIFT_HOUR && currentMinute <= START_SHIFT_MINUTE)
+        )
+      ) {
+        status = 'present'
+      } else {
+        status = 'late'
+      }
+
+    }
 
     if (!userId || !time) return false;
     const dateOnly = formatOnlyDate(time);
@@ -66,7 +85,7 @@ export const addRecordAttendance = async (userId?: string, time?: Date) => {
             userId: userId,
             date: dateOnly,
             inTime: time.toUTCString(),
-            status: "late",
+            status: status,
           },
         ])
         .select();
@@ -96,8 +115,6 @@ export const addRecordAttendance = async (userId?: string, time?: Date) => {
         console.log("outTime record", data);
       }
     }
-
-    console.log(existingRecords, "existingRecords Ok");
 
     return true;
   } catch (error) {

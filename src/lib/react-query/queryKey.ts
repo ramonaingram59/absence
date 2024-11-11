@@ -10,6 +10,7 @@ export enum QUERY_KEYS {
 
   GET_CURRENT_USER = 'getCurrentUser',
   GET_USERS = 'getUsers',
+  GET_ALL_USERS = 'getAllUsers',
   GET_USER_BY_ID = 'getUserById',
 
   SEARCH_POSTS = 'getSearchPosts',

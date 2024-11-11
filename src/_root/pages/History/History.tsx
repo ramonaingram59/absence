@@ -68,7 +68,7 @@ const Explore = () => {
 
   if (isUserLoading || isHistoryLoading) return <Loader color="lightgray" />;
   return (
-    <div className="w-full explore-container">
+    <div className="w-full">
       <div className="p-4">
         <h2 className="w-full text-xl font-semibold">Riwayat Absensi</h2>
 

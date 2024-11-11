@@ -1,7 +1,9 @@
 import { INewUser } from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createUserAccount,
+  deleteUserById,
+  getAllUsers,
   getCurrentUser,
   getUserById,
   signInAccount,
@@ -41,6 +43,28 @@ export const useGetUserById = (userId: string) => {
     queryFn: () => getUserById(userId),
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useGetAllUsers = () => {
+  return useQuery({
+    queryFn: () => getAllUsers(),
+    queryKey: [QUERY_KEYS.GET_ALL_USERS],
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useDeleteUserById = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (userId: string) => deleteUserById(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_ALL_USERS],
+      });
+    },
+
   });
 };
 

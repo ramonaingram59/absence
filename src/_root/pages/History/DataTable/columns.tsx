@@ -1,4 +1,4 @@
-import { formatDate, formatTime, formatTimeWIB } from "@/lib/utils";
+import { formatDate, formatTimeWIB } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type AttendanceRecord = {

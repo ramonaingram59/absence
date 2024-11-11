@@ -76,6 +76,7 @@ const FaceCam = () => {
   }, [modelsLoaded, isDetecting]);
 
   const handleDetectFace = useCallback(async () => {
+    console.log("Detecting face");
     if (!videoRef.current || !canvasRef.current || isDetecting) return;
 
     setIsDetecting(true);
@@ -120,7 +121,6 @@ const FaceCam = () => {
   }, [detectedFace]);
 
   const handleSaveFace = async () => {
-    console.log(detectedFace, "detectedFace");
     if (detectedFace && !isFaceSaved) {
       await saveFaces(detectedFace);
       setIsFaceSaved(true);

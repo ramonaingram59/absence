@@ -13,7 +13,7 @@ const History = lazy(() => import('./_root/pages/History/History'));
 const Settings = lazy(() => import('./_root/pages/Settings/Settings'));
 const RegisterFace = lazy(() => import('./_root/pages/Settings/pages/RegisterFace'));
 const UnknownFace = lazy(() => import('./_root/pages/Settings/pages/UnknownFace'));
-const UsersSettings = lazy(() => import('./_root/pages/Settings/pages/UsersSettings'));
+const UsersSettings = lazy(() => import('./_root/pages/Settings/pages/UsersSettings/UsersSettings'));
 const Scan = lazy(() => import('./_root/pages/Scan/Scan'));
 const AllUsers = lazy(() => import('./_root/pages/AllUsers'));
 const CreatePost = lazy(() => import('./_root/pages/CreatePost'));

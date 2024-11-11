@@ -168,3 +168,40 @@ export const getUserById = async (userId: string) => {
     return null;
   }
 };
+
+export const getAllUsers = async () => {
+  try {
+
+    let { data: allUsers, error } = await supabase
+      .from("Users")
+      .select("*")
+      .order("name", {
+        ascending: true
+      })
+      .returns<User[]>()
+
+    if (!allUsers || error) throw Error;
+
+    return allUsers
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const deleteUserById = async (userId: string) => {
+  try {
+
+    let { error, data: currentUser } = await supabase
+      .from("Users")
+      .delete()
+      .eq("id", userId)
+
+    if (!currentUser || error) throw Error;
+
+    return currentUser[0];
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
