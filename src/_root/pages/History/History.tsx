@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { useUserContext } from "@/context/AuthContext";
 import useDebounce from "@/hooks/useDebounce";
-import { useGetHistoryRecord } from "@/lib/react-query/absent/queries";
+import { useGetHistoryRecord } from "@/lib/react-query/absence/absenceQueries";
 import { cn } from "@/lib/utils";
 import { ROLE } from "@/types";
 import { addDays, format } from "date-fns";
@@ -66,7 +66,7 @@ const Explore = () => {
     });
   }, [user, history, debounceDate]);
 
-  if (isUserLoading || isHistoryLoading) return <Loader />;
+  if (isUserLoading || isHistoryLoading) return <Loader color="lightgray" />;
   return (
     <div className="w-full explore-container">
       <div className="p-4">

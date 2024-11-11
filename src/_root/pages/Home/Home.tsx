@@ -2,7 +2,7 @@ import Loader from "@/components/shared/Loader";
 import TodayCard from "./TodayCard";
 import HistoryCard from "./HistoryCard";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetHistoryRecord } from "@/lib/react-query/absent/queries";
+import { useGetHistoryRecord } from "@/lib/react-query/absence/absenceQueries";
 
 const Home = () => {
   const { user, isLoading: isUserLoading } = useUserContext();
@@ -13,7 +13,7 @@ const Home = () => {
     5
   );
 
-  if (isUserLoading || isHistoryLoading) return <Loader />;
+  if (isUserLoading || isHistoryLoading) return <Loader color="lightgray" />;
 
   return (
     <div className="flex flex-col flex-1 px-4">

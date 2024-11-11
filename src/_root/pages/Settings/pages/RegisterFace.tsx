@@ -115,7 +115,7 @@ const RegisterFace = () => {
           </Form>
         </TabsContent>
         <TabsContent value="scan">
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader color="lightgray" />}>
             <FaceCamera />
           </Suspense>
         </TabsContent>

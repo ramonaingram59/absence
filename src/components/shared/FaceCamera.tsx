@@ -3,10 +3,6 @@ import * as faceapi from "face-api.js";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { FaceData } from "@/types";
-import {
-  useGetAllFaces,
-  useSaveFaceDescriptors,
-} from "@/lib/react-query/queriesAndMutations";
 import Webcam from "react-webcam";
 import {
   checkFaceDetection,
@@ -14,7 +10,9 @@ import {
   handleCapture,
   handleDrawCanvas,
 } from "@/lib/actions/faceRecognitionAction";
-import { useAddRecordAttendance } from "@/lib/react-query/absent/queries";
+import { useAddRecordAttendance } from "@/lib/react-query/absence/absenceQueries";
+import { useGetAllFaces, useSaveFaceDescriptors } from "@/lib/react-query/face/faceQueries";
+import Loader from "./Loader";
 
 const FaceCam = () => {
   const videoRef = useRef<Webcam>(null);
@@ -78,7 +76,6 @@ const FaceCam = () => {
   }, [modelsLoaded, isDetecting]);
 
   const handleDetectFace = useCallback(async () => {
-    console.log("Detecting face");
     if (!videoRef.current || !canvasRef.current || isDetecting) return;
 
     setIsDetecting(true);
@@ -153,6 +150,10 @@ const FaceCam = () => {
 
     setFaceDetectCounter(0);
   };
+
+  if (!modelsLoaded || isLoading) {
+    return <Loader color="lightgray" />
+  }
 
   return (
     <div className="max-h-screen max-w-screen flex flex-col justify-center items-center">

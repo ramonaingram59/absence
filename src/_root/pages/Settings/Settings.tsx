@@ -1,12 +1,21 @@
+import Loader from "@/components/shared/Loader"
 import { buttonVariants } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { useUserContext } from "@/context/AuthContext"
 import { cn } from "@/lib/utils"
+import { ROLE } from "@/types"
 import { ChevronRight } from "lucide-react"
 import { Link } from "react-router-dom"
 
 
 const Settings = () => {
+  const { user, isLoading: isUserLoading } = useUserContext();
 
+
+
+  if (isUserLoading) {
+    return <Loader color="lightgray" />;
+  }
 
   return (
     <div className="flex flex-1 p-4 flex-col">
@@ -33,7 +42,7 @@ const Settings = () => {
         </Link>
 
         <Link
-          to={"/settings/users"}
+          to={user.role !== ROLE.ADMIN ? `/profile/${user.id}` : `/settings/users`}
           className={cn(buttonVariants({ variant: "outline" }), "w-full flex justify-between items-center min-h-32")}>
           <div className="flex flex-col pl-2">
             <div className="flex flex-row items-center justify-between">

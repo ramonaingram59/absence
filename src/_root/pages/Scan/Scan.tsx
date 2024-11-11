@@ -18,20 +18,26 @@ const Saved = () => {
     if (!isUserLoading && user && user.role !== ROLE.ADMIN) {
       toast.error('You are not an Admin, please contact your administrator.')
       navigate('/');
+      return
     }
 
   }, [user, isUserLoading, navigate]);
 
   if (isUserLoading) {
-    return <Loader />;
+    return <Loader color="lightgray" />;
   }
 
   return (
-    <div>Saved
-
-      <Suspense fallback={<Loader />}>
-        <FaceCamera />
-      </Suspense>
+    <div>
+      {
+        user && user.role !== ROLE.ADMIN
+          ?
+          <></>
+          :
+          <Suspense fallback={<Loader />}>
+            <FaceCamera />
+          </Suspense>
+      }
     </div>
   )
 }

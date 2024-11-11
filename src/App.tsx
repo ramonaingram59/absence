@@ -19,7 +19,7 @@ const AllUsers = lazy(() => import('./_root/pages/AllUsers'));
 const CreatePost = lazy(() => import('./_root/pages/CreatePost'));
 const EditPost = lazy(() => import('./_root/pages/EditPost'));
 const PostDetails = lazy(() => import('./_root/pages/PostDetails'));
-const Profile = lazy(() => import('./_root/pages/Profile'));
+const Profile = lazy(() => import('./_root/pages/Profile/Profile'));
 const UpdateProfile = lazy(() => import('./_root/pages/UpdateProfile'));
 
 
@@ -27,7 +27,7 @@ const App = () => {
   return (
     <main className='flex h-screen'>
       <Suspense fallback={
-        <Loader />
+        <Loader color="lightgray" />
       }>
         <Routes>
           {/* PUBLIC */}
@@ -46,7 +46,7 @@ const App = () => {
             <Route path='/create-post' element={<CreatePost />} />
             <Route path='/update-post/:id' element={<EditPost />} />
             <Route path='/posts/:id' element={<PostDetails />} />
-            <Route path='/profile/:id/*' element={<Profile />} />
+            <Route path='/profile/:id' element={<Profile />} />
             <Route path='/settings' element={<Settings />} />
             <Route path='/settings/faces' element={<RegisterFace />} />
             <Route path='/settings/users' element={<UsersSettings />} />

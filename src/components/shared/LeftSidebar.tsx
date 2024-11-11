@@ -1,6 +1,6 @@
 import { SIDEBAR_LINKS } from '@/constants'
 import { useUserContext } from '@/context/AuthContext'
-import { useSignOutAccount } from '@/lib/react-query/queriesAndMutations'
+import { useSignOutAccount } from '@/lib/react-query/auth/authQueries'
 import { INavLink, ROLE } from '@/types'
 import { useEffect } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'

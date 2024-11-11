@@ -1,13 +1,13 @@
 import { INewUser } from "@/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   createUserAccount,
   getCurrentUser,
+  getUserById,
   signInAccount,
   signOutAccount,
-} from "../actions/api/auth";
-import { allFaces, saveFaces } from "../appwrite/api";
-import { QUERY_KEYS } from "./queryKey";
+} from "../../actions/api/auth";
+import { QUERY_KEYS } from "../queryKey";
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -36,25 +36,14 @@ export const useGetCurrentUser = () => {
   });
 };
 
-export const useGetAllFaces = () => {
+export const useGetUserById = (userId: string) => {
   return useQuery({
-    queryKey: ["GET_ALL_FACES"],
-    queryFn: allFaces,
+    queryFn: () => getUserById(userId),
+    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     refetchOnWindowFocus: false,
   });
 };
 
-export const useSaveFaceDescriptors = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (descriptor: Float32Array) => saveFaces(descriptor),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["GET_ALL_FACES"],
-      });
-    },
-  });
-};
 
 // export const useCreatePost = () => {
 //   const queryClient = useQueryClient();

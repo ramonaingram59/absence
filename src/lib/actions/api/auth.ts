@@ -149,3 +149,22 @@ export const signOutAccount = async () => {
     throw new Error(`Error: ${error}`);
   }
 };
+
+
+export const getUserById = async (userId: string) => {
+  try {
+
+    let { data: currentUser, error } = await supabase
+      .from("Users")
+      .select("*")
+      .eq("id", userId)
+      .returns<User[]>()
+
+    if (!currentUser || error) throw Error;
+
+    return currentUser[0];
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

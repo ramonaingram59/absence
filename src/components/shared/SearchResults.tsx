@@ -9,7 +9,7 @@ type SearchResultProps = {
 
 const SearchResults = ({ isSearchFetching, searchPosts }: SearchResultProps) => {
 
-  if (isSearchFetching) return <Loader />
+  if (isSearchFetching) return <Loader color="lightgray" />
 
   if (searchPosts && searchPosts.documents.length > 0) {
     return (

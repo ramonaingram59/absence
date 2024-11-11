@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn, formatDate, formatTime, formatTimeWIB } from "@/lib/utils";
+import { cn, formatDate, formatTimeWIB } from "@/lib/utils";
 import { AttendanceRecord, User } from "@/types";
 import { Link } from "react-router-dom";
 
@@ -25,9 +25,6 @@ const HistoryCard = ({ user, history }: HistoryProps) => {
           <CardTitle>
             <span className="text-lg">History</span>
           </CardTitle>
-          {/* <CardDescription>
-            Shift: Fixed 9 hours (08:30 - 17:30)
-          </CardDescription> */}
         </CardHeader>
         <Separator orientation="horizontal" />
 
