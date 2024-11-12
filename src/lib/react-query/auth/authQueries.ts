@@ -3,11 +3,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createUserAccount,
   deleteUserById,
+  getAllDepartments,
   getAllUsers,
   getCurrentUser,
   getUserById,
   signInAccount,
   signOutAccount,
+  updateUserById,
 } from "../../actions/api/auth";
 import { QUERY_KEYS } from "../queryKey";
 
@@ -54,14 +56,62 @@ export const useGetAllUsers = () => {
   });
 };
 
+export const useGetAllDepartments = () => {
+  return useQuery({
+    queryFn: () => getAllDepartments(),
+    queryKey: [QUERY_KEYS.GET_ALL_DEPTS],
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useDeleteUserById = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (userId: string) => deleteUserById(userId),
+    mutationFn: ({ userId, authId }: { userId: string, authId: string }) => deleteUserById({ userId, authId }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_ALL_USERS],
+      });
+    },
+
+  });
+};
+
+export const useUpdateUserById = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id,
+      name,
+      departement,
+      email,
+      position,
+      NIK,
+      status,
+      role
+    }: {
+      id: string,
+      name: string,
+      departement: string,
+      email: string,
+      position: string,
+      NIK: number,
+      status: string,
+      role: string,
+    }) => updateUserById({
+      id,
+      name,
+      departement,
+      email,
+      position,
+      NIK,
+      status,
+      role
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID],
       });
     },
 

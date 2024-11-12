@@ -22,7 +22,7 @@ const UsersSettings = () => {
   return (
     <div className="w-full">
       <div className="p-4">
-        <h2 className="w-full text-xl font-semibold">List Karyawan</h2>
+        <h2 className="w-full text-xl font-semibold pb-4">List Karyawan</h2>
 
         {/* <div className="flex justify-end w-full py-2 mt-8">
           <Popover>

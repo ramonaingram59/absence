@@ -18,8 +18,8 @@ import { Textarea } from "../ui/textarea";
 //   useCreatePost,
 //   useUpdatePost,
 // } from "@/lib/react-query/queriesAndMutations";
-import { useUserContext } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
+// import { useUserContext } from "@/context/AuthContext";
+// import { useNavigate } from "react-router-dom";
 // import { PostWithUser } from "@/types";
 
 type PostFormProps = {
@@ -33,10 +33,10 @@ const PostForm = ({ post, action }: PostFormProps) => {
   // const { mutateAsync: updatePost, isPending: isLoadingUpdate } =
   //   useUpdatePost();
 
-  const { user } = useUserContext();
-  const navigate = useNavigate();
+  // const { user } = useUserContext();
+  // const navigate = useNavigate();
 
-  console.log(post);
+  console.log(post, action);
   let tags = post?.tags?.join(" ");
 
   const form = useForm<z.infer<typeof PostValidation>>({
@@ -48,7 +48,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
       tags: post ? tags : "",
     },
   });
-  const { handleSubmit, control } = form;
+  const { control } = form;
 
   // const onSubmit = async (data: z.infer<typeof PostValidation>) => {
   //   if (post && action === "update") {

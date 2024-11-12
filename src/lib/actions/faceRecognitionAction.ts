@@ -3,7 +3,7 @@ import * as faceapi from "face-api.js";
 import { RefObject } from "react";
 import Webcam from "react-webcam";
 
-export const detectSingleFace = async (video: HTMLVideoElement) => {
+export const detectSingleFace = async (video: HTMLVideoElement | HTMLImageElement) => {
   let detection = await faceapi
     .detectSingleFace(video)
     .withFaceLandmarks()
@@ -12,7 +12,7 @@ export const detectSingleFace = async (video: HTMLVideoElement) => {
   return detection;
 };
 
-export const detectManyFace = async (video: HTMLVideoElement) => {
+export const detectManyFace = async (video: HTMLVideoElement | HTMLImageElement) => {
   const detectionsManyFace = await faceapi
     .detectAllFaces(video)
     .withFaceLandmarks()
@@ -41,7 +41,7 @@ export const checkFaceDetection = async (
     }
   });
 
-  const THRESHOLD = 0.5;
+  const THRESHOLD = 0.7;
   if (smallestDistance < THRESHOLD && bestMatch) {
     return bestMatch;
   } else {

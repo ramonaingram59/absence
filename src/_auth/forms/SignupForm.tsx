@@ -9,11 +9,12 @@ import { Input } from "@/components/ui/input"
 import { SignupValidation } from "@/lib/validation"
 import Loader from "@/components/shared/Loader"
 import { Link, useNavigate } from "react-router-dom"
-import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/auth/authQueries"
+import { useCreateUserAccount, useGetAllDepartments, useSignInAccount } from "@/lib/react-query/auth/authQueries"
 import { useUserContext } from "@/context/AuthContext"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { checkRegisteredUser } from "@/lib/actions/api/auth"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 
 
@@ -35,6 +36,7 @@ const SignupForm = () => {
 
   const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount()
   const { mutateAsync: signInAccount } = useSignInAccount()
+  const { data: allDepts, isLoading: isDeptsLoading } = useGetAllDepartments()
 
 
   const onSubmit = async (values: z.infer<typeof SignupValidation>) => {
@@ -79,6 +81,8 @@ const SignupForm = () => {
     }
   }
 
+  if (isDeptsLoading) return <Loader color="lightgray" />
+
   return (
     <Form {...form}>
       <div className="sm:w-420 flex justify-center items-center flex-col">
@@ -111,10 +115,26 @@ const SignupForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Departement</FormLabel>
-                <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
-                </FormControl>
-                <FormMessage />
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Pilih departemen" className="capitalize" defaultValue={"IT"} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {
+                      allDepts?.map((item, index) => (
+                        <SelectItem
+                          value={item.name}
+                          key={index}
+                          className="capitalize"
+                        >
+                          {item.name}
+                        </SelectItem>
+                      ))
+                    }
+                  </SelectContent>
+                </Select>
               </FormItem>
             )}
           />

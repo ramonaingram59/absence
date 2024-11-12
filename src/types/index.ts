@@ -65,3 +65,9 @@ export enum ROLE {
   ADMIN = "admin",
   USER = "user",
 }
+
+export enum STATUS {
+  TETAP = "Karyawan Tetap",
+  KONTRAK = "Karyawan Kontrak",
+  MAGANG = "Karyawan Magang",
+}

@@ -31,12 +31,13 @@ type Props = {
 
 const ActionCell: React.FC<Props> = ({ row }) => {
   const userId = row.original.id;
+  const authId = row.original.authId;
 
   const { mutateAsync: deleteUserById } = useDeleteUserById()
 
-  const handleDeleteUser = async (userId: string) => {
+  const handleDeleteUser = async (userId: string, authId: string) => {
 
-    await deleteUserById(userId, {
+    await deleteUserById({ userId, authId }, {
       onSuccess() {
         toast.success("Success deleting user.")
       },
@@ -63,7 +64,7 @@ const ActionCell: React.FC<Props> = ({ row }) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={() => handleDeleteUser(userId)}>Continue</AlertDialogAction>
+              <AlertDialogAction onClick={() => handleDeleteUser(userId, authId)}>Continue</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

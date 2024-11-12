@@ -41,6 +41,10 @@ export const bcryptPasswordHash = async (password: string) => {
   return hashedPassword;
 };
 
+export const bcryptComparePassword = async (password: string, hashedPassword: string) => {
+  return await bcrypt.compare(password, hashedPassword);
+};
+
 export const formatDate = (date: Date | string | null) => {
   return date ? format(date, "eeee, dd MMM yyyy") : "-";
 };

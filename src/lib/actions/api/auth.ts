@@ -1,7 +1,7 @@
 import { INewUser, ROLE, User } from "@/types";
-import { supabase } from "../../supabase/connect";
 import { avatars } from "../../config";
-import { bcryptPasswordHash } from "../../utils";
+import { supabase } from "../../supabase/connect";
+import { bcryptComparePassword, bcryptPasswordHash } from "../../utils";
 
 export const createUserAccount = async (user: INewUser) => {
   try {
@@ -95,12 +95,27 @@ export const signInAccount = async (user: {
   try {
     const { email, password } = user;
 
-    const session = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    let { data: registeredUser, error } = await supabase
+      .from("Users")
+      .select("*")
+      .eq("email", email);
 
-    return session;
+    if (error || registeredUser?.length === 0) throw new Error("Email tidak valid")
+
+    if (registeredUser) {
+      const comparePassword = await bcryptComparePassword(password, registeredUser[0].password!)
+
+      if (!comparePassword) throw new Error("Email atau password tidak valid");
+
+      const session = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      return session;
+    } {
+      throw new Error("Email tidak ditemukan");
+    }
   } catch (error) {
     console.log(error);
   }
@@ -189,15 +204,86 @@ export const getAllUsers = async () => {
   }
 };
 
-export const deleteUserById = async (userId: string) => {
+export const getAllDepartments = async () => {
   try {
 
-    let { error, data: currentUser } = await supabase
+    let { data: allDepts, error } = await supabase
+      .from("Departement")
+      .select("*")
+      .order("name", {
+        ascending: true
+      })
+
+    if (!allDepts || error) throw Error;
+
+    return allDepts
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const deleteUserById = async ({ userId, authId }: { userId: string, authId: string }) => {
+  try {
+
+    if (!userId || !authId) return null
+
+    let { error, data: userData } = await supabase
       .from("Users")
       .delete()
       .eq("id", userId)
 
+    let { error: authErr, data: authData } = await supabase
+      .auth
+      .admin
+      .deleteUser(authId)
+
+    if (!userData || error || authErr || !authData) throw Error;
+
+    return userData[0];
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+
+export const updateUserById = async ({
+  id,
+  name,
+  departement,
+  email,
+  position,
+  NIK,
+  status,
+  role
+}: {
+  id: string,
+  name: string,
+  departement: string,
+  email: string,
+  position: string,
+  NIK: number,
+  status: string,
+  role: string,
+}) => {
+  try {
+
+    const { data: currentUser, error } = await supabase
+      .from('Users')
+      .update({
+        name: name,
+        departement: departement,
+        email: email,
+        position: position,
+        NIK: NIK,
+        status: status,
+        role: role
+      })
+      .eq('id', id);
+
     if (!currentUser || error) throw Error;
+    console.log(currentUser, 'updateById')
 
     return currentUser[0];
   } catch (error) {

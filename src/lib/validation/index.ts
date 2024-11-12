@@ -22,16 +22,16 @@ export const PostValidation = z.object({
 
 export const RegisterFileUpload = z.object({
   file: z.custom<File[]>(),
-  fullName: z.string().min(4, { message: 'Full Name is too short.' }).max(100, { message: 'Name is too long.' }),
+  userId: z.string().min(4, { message: 'Please select user.' }),
 })
 
 
 export const ProfileValidation = z.object({
   name: z.string().min(3, { message: 'Name must be at least 2 characters' }),
-  departement: z.string().min(3, { message: 'Departement must be at least 2 characters' }),
+  departement: z.string().min(2, { message: 'Departement must be at least 2 characters' }),
   email: z.string().email({ message: "Please provide valid email type" }),
-  position: z.string({ message: 'Position must be at least 2 characters' }).min(3, { message: 'Position must be at least 2 characters' }),
-  NIK: z.number({ message: 'NIK must be at least 2 characters' }).min(3, { message: 'NIK must be at least 2 characters' }),
-  status: z.string({ message: 'Status must be at least 2 characters' }).min(3, { message: 'Status must be at least 2 characters' }),
-  role: z.string({ message: 'Role must be at least 2 characters' }).min(3, { message: 'Role must be at least 2 characters' }),
+  position: z.string({ message: 'Position is required.' }).min(3, { message: 'Position must be at least 2 characters' }),
+  NIK: z.number({ message: 'NIK is required.' }),
+  status: z.string({ message: 'Status is required.' }).min(3, { message: 'Status must be at least 2 characters' }),
+  role: z.string().min(3, { message: 'Role must be at least 2 characters' }),
 })

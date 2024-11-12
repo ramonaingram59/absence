@@ -38,7 +38,7 @@ const SigninForm = () => {
     const session = await signInAccount(data)
 
     if (!session) {
-      toast.error('No Session. Please try again')
+      toast.error('Sign in failed. Please try again')
       return
     }
 
@@ -48,7 +48,7 @@ const SigninForm = () => {
       reset()
       navigate('/')
     } else {
-      toast.error('Sign in failed. Please try again')
+      toast.error("You're not logged in. Please try again")
       return
     }
   }

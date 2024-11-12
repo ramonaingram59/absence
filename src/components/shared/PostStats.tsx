@@ -4,9 +4,8 @@
 //   useLikePost,
 //   useSavePost,
 // } from "@/lib/react-query/queriesAndMutations";
-import { checkIsLiked } from "@/lib/utils";
 // import { PostWithUser } from "@/types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type PostStatsProps = {
   post: any;
@@ -18,8 +17,8 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     ? post?.likedBy!.map((userId: string) => userId)
     : [];
   const [likes, setLikes] = useState(likesList);
-  const [isSaved, setIsSaved] = useState(false);
-
+  // const [isSaved, setIsSaved] = useState(false);
+  console.log(userId, setLikes)
   // const { mutate: likePost, isPending: isLiking } = useLikePost();
   // const { mutate: savePost, isPending: isSavingPost } = useSavePost();
   // const { mutate: deleteSavePost, isPending: isDeletingSave } =
@@ -30,42 +29,42 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
   //   ? currentUser?.save!.find((postId: string) => postId === post.id)
   //   : "";
 
-  const handleLikePost = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  // const handleLikePost = (e: React.MouseEvent) => {
+  //   e.stopPropagation();
 
-    let newLikes = [...likes];
+  //   let newLikes = [...likes];
 
-    const alreadyLiked = newLikes.includes(userId);
+  //   const alreadyLiked = newLikes.includes(userId);
 
-    if (alreadyLiked) {
-      newLikes = newLikes.filter((id) => id !== userId);
-    } else {
-      newLikes.push(userId);
-    }
+  //   if (alreadyLiked) {
+  //     newLikes = newLikes.filter((id) => id !== userId);
+  //   } else {
+  //     newLikes.push(userId);
+  //   }
 
-    setLikes(newLikes);
-    // likePost({
-    //   postId: post.id,
-    //   likesArray: newLikes,
-    // });
-  };
+  //   setLikes(newLikes);
+  //   // likePost({
+  //   //   postId: post.id,
+  //   //   likesArray: newLikes,
+  //   // });
+  // };
 
-  const handleSavePost = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  // const handleSavePost = (e: React.MouseEvent) => {
+  //   e.stopPropagation();
 
-    // if (savedPostRecord) {
-    //   setIsSaved(false);
-    //   return deleteSavePost({
-    //     savedRecordId: savedPostRecord,
-    //   });
-    // } else {
-    //   savePost({
-    //     postId: post.id,
-    //     userId: userId,
-    //   });
-    //   setIsSaved(true);
-    // }
-  };
+  //   // if (savedPostRecord) {
+  //   //   setIsSaved(false);
+  //   //   return deleteSavePost({
+  //   //     savedRecordId: savedPostRecord,
+  //   //   });
+  //   // } else {
+  //   //   savePost({
+  //   //     postId: post.id,
+  //   //     userId: userId,
+  //   //   });
+  //   //   setIsSaved(true);
+  //   // }
+  // };
 
   // useEffect(() => {
   //   setIsSaved(!!savedPostRecord);

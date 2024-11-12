@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { forwardRef, useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
@@ -8,7 +8,7 @@ type FileUploaderProps = {
   mediaUrl?: string;
 };
 
-const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
+const FileUploader = forwardRef<HTMLImageElement, FileUploaderProps>(({ fieldChange, mediaUrl }, ref) => {
   const [fileUrl, setFileUrl] = useState(mediaUrl);
   const [file, setFile] = useState<File[]>([]);
 
@@ -41,6 +41,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
         <>
           <div className="flex justify-center flex-1 w-full p-5 lg:p-10">
             <img
+              ref={ref}
               src={fileUrl}
               alt="upload-image"
               className="h-80 lg:h-[480px] w-full rounded-lg object-cover object-top"
@@ -71,6 +72,6 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
       )}
     </div>
   );
-};
+})
 
 export default FileUploader;

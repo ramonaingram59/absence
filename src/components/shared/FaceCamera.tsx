@@ -21,11 +21,11 @@ const FaceCam = () => {
 
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [detectedFace, setDetectedFace] = useState<Float32Array | null>(null);
+  const [detectedPerson, setDetectedPerson] = useState<FaceData | null>(null);
   const [isDetecting, setIsDetecting] = useState(false);
   const [isFaceSaved, setIsFaceSaved] = useState(false);
   const [facesData, setFacesData] = useState<FaceData[] | null>(null);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [personName, setPersonName] = useState("");
   const [faceDetectCounter, setFaceDetectCounter] = useState(0);
 
   const { data: faces, isLoading, isSuccess } = useGetAllFaces();
@@ -69,7 +69,7 @@ const FaceCam = () => {
           handleDetectFace();
         }
       },
-      personName !== "" ? 500 : 250
+      detectedPerson?.name !== "" ? 500 : 250
     );
 
     return () => clearInterval(intervalId);
@@ -95,14 +95,15 @@ const FaceCam = () => {
       detectionsManyFace.forEach(async (detections) => {
         if (detections) {
           setDetectedFace(detections.descriptor);
-          const detectedPerson = await checkFaceDetection(
+
+          const person = await checkFaceDetection(
             detections.descriptor,
             facesData
           );
+          setDetectedPerson(person)
 
           if (detectedPerson) {
-            setPersonName(detectedPerson.name);
-            handleDrawCanvas(canvas, detections, displaySize, personName);
+            handleDrawCanvas(canvas, detections, displaySize, detectedPerson?.name);
             setFaceDetectCounter((prevCounter) => prevCounter + 1);
 
             if (faceDetectCounter + 1 >= 3) {
@@ -122,7 +123,10 @@ const FaceCam = () => {
 
   const handleSaveFace = async () => {
     if (detectedFace && !isFaceSaved) {
-      await saveFaces(detectedFace);
+      await saveFaces({
+        userId: detectedPerson?.userId!,
+        descriptor: detectedFace
+      });
       setIsFaceSaved(true);
       toast.success("Face saved successfully!");
     } else {
@@ -159,7 +163,7 @@ const FaceCam = () => {
     <div className="max-h-screen max-w-screen flex flex-col justify-center items-center">
       <h1>Face Recognition</h1>
       <div>
-        <p>Recognized: {personName}</p>
+        <p>Recognized: {detectedPerson?.name}</p>
         <p>Counter: {faceDetectCounter}</p>
       </div>
 
@@ -190,11 +194,10 @@ const FaceCam = () => {
       <div className="flex justify-center items-center mt-5 space-x-4 z-10">
         <Button
           size="lg"
-          className={`p-5 text-lg rounded-lg ${
-            isFaceSaved
+          className={`p-5 text-lg rounded-lg ${isFaceSaved
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-gray-900 hover:scale-105 active:scale-95 transition transform outline outline-dark-4 outline-1"
-          } text-white`}
+            } text-white`}
           onClick={handleSaveFace}
           disabled={isFaceSaved}
         >

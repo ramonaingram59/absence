@@ -1,25 +1,44 @@
 import FileUploader from "@/components/shared/FileUploader";
 import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserContext } from "@/context/AuthContext";
+import { detectSingleFace, handleDrawCanvas } from "@/lib/actions/faceRecognitionAction";
+import { useGetAllUsers } from "@/lib/react-query/auth/authQueries";
+import { useSaveFaceDescriptors } from "@/lib/react-query/face/faceQueries";
 import { RegisterFileUpload } from "@/lib/validation";
 import { ROLE } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
+import * as faceapi from "face-api.js";
 
 
 const FaceCamera = lazy(() => import('@/components/shared/FaceCamera'));
 
 const RegisterFace = () => {
-  const { user, isLoading: isUserLoading } = useUserContext();
+  const isSubmitting = false
   const navigate = useNavigate()
+  const imageRef = useRef<HTMLImageElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const { user, isLoading: isUserLoading } = useUserContext();
+  const { data: allUsers, isLoading: isAllUsersLoading } = useGetAllUsers()
+  const { mutateAsync: saveFaces } = useSaveFaceDescriptors();
+
+  const form = useForm<z.infer<typeof RegisterFileUpload>>({
+    resolver: zodResolver(RegisterFileUpload),
+    defaultValues: {
+      file: [],
+      userId: '',
+    },
+  });
+  const { handleSubmit, control, reset } = form;
 
   useEffect(() => {
 
@@ -30,25 +49,84 @@ const RegisterFace = () => {
 
   }, [user, isUserLoading, navigate]);
 
-  const form = useForm<z.infer<typeof RegisterFileUpload>>({
-    resolver: zodResolver(RegisterFileUpload),
-    defaultValues: {
-      file: [],
-      fullName: '',
-    },
-  });
-  const { handleSubmit, control, formState: { errors } } = form;
+  useEffect(() => {
+    const loadModels = async () => {
+      try {
+        await Promise.all([
+          faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
+          faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+          faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+          // faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+          // faceapi.nets.mtcnn.loadFromUri("/models"),
+        ]);
+        console.log('Models loaded')
+      } catch (err) {
+        console.error("Failed to load models", err);
+      }
+    };
+
+    loadModels();
+
+    return () => { }
+  }, []);
 
 
   const onSubmit = async (data: z.infer<typeof RegisterFileUpload>) => {
+
+    if (data.file.length === 0) {
+      toast.error("Please upload an image.")
+      return
+    }
+
+    if (imageRef.current) {
+      let detections = await detectSingleFace(imageRef?.current);
+
+
+      if (!detections) {
+        toast.info("No face detected.");
+        console.log('No Face detected')
+      } else {
+        console.log(detections.descriptor)
+
+        let canvas = canvasRef.current
+
+        if (!canvas) return
+
+        const displaySize = {
+          width: imageRef?.current.width,
+          height: imageRef?.current.height,
+        };
+        faceapi.matchDimensions(canvas, displaySize);
+
+        handleDrawCanvas(canvas, detections, displaySize, 'Wajah terdeteksi');
+
+        // await saveFaces({
+        //   userId: data.userId,
+        //   descriptor: detections?.descriptor
+        // },
+        //   {
+        //     onSuccess() {
+        //       toast.success("Success save face.")
+        //       navigate('/settings')
+        //     },
+        //   }
+        // )
+
+      }
+
+
+
+    }
+
+    // console.log(data)
+  }
+
+  const onErr = async (data: any) => {
     // TODO
     console.log(data)
   }
 
-  const onErr = async () => {
-    // TODO
-    console.log(errors)
-  }
+  if (isAllUsersLoading || isUserLoading) return <Loader color="lightgray" />
 
   return (
     <div className="py-4 w-full">
@@ -57,26 +135,49 @@ const RegisterFace = () => {
           Face Registration
         </span>
       </div>
-      <Tabs defaultValue="upload" className="w-full flex flex-col justify-center items-center">
+      <Tabs defaultValue="upload" className="w-full flex flex-col justify-center items-center"
+        onValueChange={() => reset()}
+      >
         <TabsList>
           <TabsTrigger value="upload">Upload Foto</TabsTrigger>
           <TabsTrigger value="scan">Scan Face</TabsTrigger>
         </TabsList>
-        <TabsContent value="upload" >
+        <TabsContent value="upload">
           <Form {...form}>
             <form
               onSubmit={handleSubmit(onSubmit, onErr)}
             >
               <FormField
                 control={control}
-                name="fullName"
+                name="userId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="shad-form_label">Full Name</FormLabel>
-                    <FormControl>
-                      <Input type="text" className="shad-input" {...field} />
-                    </FormControl>
-                    <FormMessage className="shad-form_message" />
+                    <FormLabel>Nama Karyawan</FormLabel>
+                    <Select onValueChange={field.onChange}
+                      defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue
+                            placeholder="Pilih karyawan"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {
+                          allUsers?.map((item, index) => (
+                            <SelectItem
+                              value={item.id}
+                              key={index}
+                              className="capitalize"
+                            >
+                              {item.name}
+                            </SelectItem>
+                          ))
+                        }
+                      </SelectContent>
+                    </Select>
+                    <FormDescription className="text-xs">Pilih karyawan untuk disimpan wajahnya ke dalam sistem.</FormDescription>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -84,30 +185,36 @@ const RegisterFace = () => {
                 control={control}
                 name="file"
                 render={({ field }) => (
-                  <FormItem className="w-full mt-2 px-20 flex flex-col justify-center items-center border rounded-lg shadow" >
+                  <FormItem className="w-full mt-2 px-20 flex flex-col justify-center items-center border rounded-lg shadow relative" >
                     <FormLabel className="text-lg">Face Photos</FormLabel>
                     <FormControl >
                       <FileUploader
+                        ref={imageRef}
                         fieldChange={field.onChange}
                         mediaUrl={undefined}
                       />
                     </FormControl>
+                    <canvas
+                      ref={canvasRef}
+                      width={imageRef.current?.width}
+                      height={imageRef.current?.height}
+                      className="absolute"
+                      style={{ position: "absolute", top: 0, left: 0, zIndex: 2 }}
+                    />
                     <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
               <Button
-                // disabled={isCreatingPost || isLoadingUpdate}
+                disabled={isSubmitting}
                 type="submit"
                 className="capitalize whitespace-nowrap mt-2 w-full"
               >
-                {/* {isCreatingPost || isLoadingUpdate ? (
-              <div className="gap-2 flex justify-center items-center">
-                <Loader /> Loading...
-              </div>
-            ) : (
-              action
-            )} */}
+                {isSubmitting ? (
+                  <div className="gap-2 flex justify-center items-center">
+                    <Loader /> Loading...
+                  </div>
+                ) : <></>}
                 Simpan
               </Button>
 

@@ -1,8 +1,8 @@
 // import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const EditPost = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
 
   // const { data: post, isPending: isGettingPost } = useGetPostById(id || "");
 

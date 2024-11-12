@@ -1,7 +1,5 @@
-import { INewPost, IUpdatePost } from "@/types";
-import { appwriteConfig, databases } from "../config";
+import { getAccount, getUserById } from "../actions/api/auth";
 import { supabase } from "../supabase/connect";
-import { getAccount, getCurrentUser } from "../actions/api/auth";
 
 export const uploadFile = async (file: File) => {
   try {
@@ -53,18 +51,18 @@ export const getFilePreview = async (fileId: string) => {
   }
 };
 
-export const deleteFile = async (fileName: string) => {
-  try {
-    // await storage.deleteFile(appwriteConfig.storageId, fileId);
+// export const deleteFile = async (fileName: string) => {
+//   try {
+//     // await storage.deleteFile(appwriteConfig.storageId, fileId);
 
-    const { data } = await supabase.storage.from("media").remove([fileName]);
+//     const { data } = await supabase.storage.from("media").remove([fileName]);
 
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error(`Error: ${error}`);
-  }
-};
+//     return data;
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error(`Error: ${error}`);
+//   }
+// };
 
 // export const createPost = async (post: INewPost) => {
 //   try {
@@ -445,12 +443,17 @@ export const deleteFile = async (fileName: string) => {
 // };
 
 
-export const saveFaces = async (descriptor: Float32Array) => {
+export const saveFaces = async ({ userId, descriptor }: { userId: string, descriptor: Float32Array }) => {
   try {
-    const currentUser = await getCurrentUser();
+
+    // console.log(userId)
+    // const currentUser = await getCurrentUser();
+    const currentUser = await getUserById(userId)
+
     const jsonDescriptor = JSON.stringify(Array.from(descriptor));
 
 
+    console.log(currentUser, 'savefafacac')
     const { data: insertedSave, error } = await supabase
       .from("FaceData")
       .insert([

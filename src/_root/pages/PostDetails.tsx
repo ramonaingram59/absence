@@ -1,22 +1,16 @@
-import Loader from "@/components/shared/Loader"
-import PostStats from "@/components/shared/PostStats"
-import { Button } from "@/components/ui/button"
-import { useUserContext } from "@/context/AuthContext"
 // import { useGetPostById } from "@/lib/react-query/queriesAndMutations"
-import { timeAgo } from "@/lib/utils"
-import { Link, useParams } from "react-router-dom"
 
 const PostDetails = () => {
-  const { id } = useParams()
-  // const { data: post, isPending: isPostLoading } = useGetPostById(id || '')
+  // const { id } = useParams()
+  // // const { data: post, isPending: isPostLoading } = useGetPostById(id || '')
 
-  const { user } = useUserContext()
+  // const { user } = useUserContext()
 
-  // const { mutate: deletePost } = useDeletePost()
+  // // const { mutate: deletePost } = useDeletePost()
 
-  const handleDelete = () => {
+  // const handleDelete = () => {
 
-  }
+  // }
 
   return (
     <div className="post_details-container">
