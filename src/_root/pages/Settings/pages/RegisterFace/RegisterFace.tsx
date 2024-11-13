@@ -11,12 +11,12 @@ import { useSaveFaceDescriptors } from "@/lib/react-query/face/faceQueries";
 import { RegisterFileUpload } from "@/lib/validation";
 import { ROLE } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import * as faceapi from "face-api.js";
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
-import * as faceapi from "face-api.js";
 
 
 const FaceCamera = lazy(() => import('@/components/shared/FaceCamera'));
@@ -56,8 +56,6 @@ const RegisterFace = () => {
           faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
           faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
           faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-          // faceapi.nets.faceExpressionNet.loadFromUri("/models"),
-          // faceapi.nets.mtcnn.loadFromUri("/models"),
         ]);
         console.log('Models loaded')
       } catch (err) {
@@ -78,51 +76,57 @@ const RegisterFace = () => {
       return
     }
 
-    if (imageRef.current) {
-      let detections = await detectSingleFace(imageRef?.current);
+    const detections = await handleCheckFace()
 
+    if (!detections) {
+      toast.info("No face detected.");
+      console.log('No Face detected')
+      return
+    }
 
-      if (!detections) {
-        toast.info("No face detected.");
-        console.log('No Face detected')
-      } else {
-        console.log(detections.descriptor)
-
-        let canvas = canvasRef.current
-
-        if (!canvas) return
-
-        const displaySize = {
-          width: imageRef?.current.width,
-          height: imageRef?.current.height,
-        };
-        faceapi.matchDimensions(canvas, displaySize);
-
-        handleDrawCanvas(canvas, detections, displaySize, 'Wajah terdeteksi');
-
-        // await saveFaces({
-        //   userId: data.userId,
-        //   descriptor: detections?.descriptor
-        // },
-        //   {
-        //     onSuccess() {
-        //       toast.success("Success save face.")
-        //       navigate('/settings')
-        //     },
-        //   }
-        // )
-
+    await saveFaces({
+      userId: data.userId,
+      descriptor: detections?.descriptor
+    },
+      {
+        onSuccess() {
+          toast.success("Success save face.")
+          navigate('/settings')
+        },
       }
+    )
 
 
+  }
+
+  const handleCheckFace = async () => {
+    if (!imageRef.current) return
+
+    let detections = await detectSingleFace(imageRef?.current);
+
+    if (!detections) {
+      toast.info("No face detected.");
+      console.log('No Face detected')
+    } else {
+      let canvas = canvasRef.current
+      if (!canvas) return
+
+      const displaySize = {
+        width: imageRef?.current.width,
+        height: imageRef?.current.height,
+      };
+
+      faceapi.matchDimensions(canvas, displaySize);
+
+      handleDrawCanvas(canvas, detections, displaySize, 'Wajah terdeteksi')
 
     }
 
-    // console.log(data)
+    return detections
   }
 
+
   const onErr = async (data: any) => {
-    // TODO
     console.log(data)
   }
 
@@ -198,26 +202,39 @@ const RegisterFace = () => {
                       ref={canvasRef}
                       width={imageRef.current?.width}
                       height={imageRef.current?.height}
-                      className="absolute"
-                      style={{ position: "absolute", top: 0, left: 0, zIndex: 2 }}
+                      className="absolute z-[2]"
                     />
                     <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
-              <Button
-                disabled={isSubmitting}
-                type="submit"
-                className="capitalize whitespace-nowrap mt-2 w-full"
-              >
-                {isSubmitting ? (
-                  <div className="gap-2 flex justify-center items-center">
-                    <Loader /> Loading...
-                  </div>
-                ) : <></>}
-                Simpan
-              </Button>
-
+              <div className="flex flex-row justify-center items-center gap-4 mb-8">
+                <Button
+                  onClick={handleCheckFace}
+                  type="button"
+                  className="capitalize whitespace-nowrap mt-2 w-full"
+                  variant="outline"
+                >
+                  {isSubmitting ? (
+                    <div className="gap-2 flex justify-center items-center">
+                      <Loader /> Loading...
+                    </div>
+                  ) : <></>}
+                  Cek
+                </Button>
+                <Button
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="capitalize whitespace-nowrap mt-2 w-full"
+                >
+                  {isSubmitting ? (
+                    <div className="gap-2 flex justify-center items-center">
+                      <Loader /> Loading...
+                    </div>
+                  ) : <></>}
+                  Simpan
+                </Button>
+              </div>
             </form>
           </Form>
         </TabsContent>

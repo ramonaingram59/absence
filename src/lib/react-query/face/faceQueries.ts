@@ -1,6 +1,7 @@
-import { allFaces, saveFaces } from "@/lib/appwrite/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../queryKey";
+import { allUnknownFaces, deleteUnknownFace, recordUnknownFaces } from "@/lib/actions/api/unknown-face";
+import { allFaces, saveFaces } from "@/lib/actions/api/faces";
 
 export const useGetAllFaces = () => {
   return useQuery({
@@ -19,5 +20,52 @@ export const useSaveFaceDescriptors = () => {
         queryKey: [QUERY_KEYS.GET_ALL_FACES],
       });
     },
+  });
+};
+
+export const useRecordUnknownFaces = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      descriptor,
+      faceImage,
+      timestamp
+    }: {
+      faceImage: string,
+      timestamp: Date,
+      descriptor: Float32Array
+    }) => recordUnknownFaces({
+      descriptor,
+      faceImage,
+      timestamp
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_ALL_UNKNOWN_FACES],
+      });
+    },
+  });
+};
+
+export const useGetAllUnknownFaces = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_ALL_UNKNOWN_FACES],
+    queryFn: allUnknownFaces,
+    refetchOnWindowFocus: false,
+  });
+};
+
+
+export const useDeleteUnknownFace = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id }: { id: string }) => deleteUnknownFace({ id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_ALL_UNKNOWN_FACES],
+      });
+    },
+
   });
 };

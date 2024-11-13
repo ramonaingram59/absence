@@ -1,4 +1,4 @@
-import { getAccount, getUserById } from "../actions/api/auth";
+import { getAccount } from "../actions/api/auth";
 import { supabase } from "../supabase/connect";
 
 export const uploadFile = async (file: File) => {
@@ -442,54 +442,3 @@ export const getFilePreview = async (fileId: string) => {
 //   }
 // };
 
-
-export const saveFaces = async ({ userId, descriptor }: { userId: string, descriptor: Float32Array }) => {
-  try {
-
-    // console.log(userId)
-    // const currentUser = await getCurrentUser();
-    const currentUser = await getUserById(userId)
-
-    const jsonDescriptor = JSON.stringify(Array.from(descriptor));
-
-
-    console.log(currentUser, 'savefafacac')
-    const { data: insertedSave, error } = await supabase
-      .from("FaceData")
-      .insert([
-        {
-          name: currentUser?.name!,
-          descriptor: jsonDescriptor,
-          userId: currentUser?.id
-        },
-      ])
-      .select()
-
-    console.log(insertedSave, 'insertedSave')
-
-    if (error) throw Error
-
-    return insertedSave
-  } catch (error) {
-    console.log(error);
-    throw new Error(`Error: ${error}`);
-  }
-};
-
-export const allFaces = async () => {
-  try {
-
-    const { data: insertedSave, error } = await supabase
-      .from("FaceData")
-      .select()
-
-    console.log(insertedSave, 'insertedSave')
-
-    if (error) throw Error
-
-    return insertedSave
-  } catch (error) {
-    console.log(error);
-    throw new Error(`Error: ${error}`);
-  }
-};

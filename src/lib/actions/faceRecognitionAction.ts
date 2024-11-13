@@ -25,28 +25,49 @@ export const checkFaceDetection = async (
   descriptor: Float32Array,
   facesData: FaceData[] | null
 ): Promise<FaceData | null> => {
-  let bestMatch: FaceData | null = null;
-  let smallestDistance = Infinity;
+  if (!facesData || facesData.length === 0) return null;
 
-  facesData?.forEach((face: FaceData) => {
+  // Convert facesData into labeled descriptors
+  const labeledDescriptors = facesData.map(face => {
     const savedDescriptor = new Float32Array(
       JSON.parse(face.descriptor as string)
     );
-
-    const distance = faceapi.euclideanDistance(descriptor, savedDescriptor);
-
-    if (distance < smallestDistance) {
-      smallestDistance = distance;
-      bestMatch = face;
-    }
+    return new faceapi.LabeledFaceDescriptors(face.userId!, [savedDescriptor]);
   });
 
-  const THRESHOLD = 0.7;
-  if (smallestDistance < THRESHOLD && bestMatch) {
-    return bestMatch;
-  } else {
-    return null;
-  }
+  const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors);
+
+  const bestMatch = faceMatcher.findBestMatch(descriptor);
+
+  const matchedFace = facesData.find(face => face.userId === bestMatch.label);
+
+  return matchedFace || null;
+
+
+  // let bestMatch: FaceData | null = null;
+  // let smallestDistance = Infinity;
+
+  // facesData?.forEach((face: FaceData) => {
+  //   const savedDescriptor = new Float32Array(
+  //     JSON.parse(face.descriptor as string)
+  //   );
+
+  //   const distance = faceapi.euclideanDistance(descriptor, savedDescriptor);
+
+  //   if (distance < smallestDistance) {
+  //     smallestDistance = distance;
+  //     bestMatch = face;
+  //   }
+  // });
+
+  // const THRESHOLD = 0.4;
+  // if (smallestDistance < THRESHOLD && bestMatch) {
+  //   return bestMatch;
+  // } else {
+  //   return null;
+  // }
+
+
 };
 
 export const handleDrawCanvas = (
@@ -68,8 +89,8 @@ export const handleDrawCanvas = (
   );
 };
 
-export const handleCapture = (videoRef: RefObject<Webcam>) => {
-  let imageBlob = videoRef?.current?.getScreenshot() ?? null;
+export const handleCapture = async (videoRef: RefObject<Webcam>) => {
+  let imageBlob = await videoRef?.current?.getScreenshot() ?? null;
 
   return imageBlob;
 };

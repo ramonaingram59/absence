@@ -11,7 +11,7 @@ import {
   handleDrawCanvas,
 } from "@/lib/actions/faceRecognitionAction";
 import { useAddRecordAttendance } from "@/lib/react-query/absence/absenceQueries";
-import { useGetAllFaces, useSaveFaceDescriptors } from "@/lib/react-query/face/faceQueries";
+import { useGetAllFaces, useRecordUnknownFaces, useSaveFaceDescriptors } from "@/lib/react-query/face/faceQueries";
 import Loader from "./Loader";
 
 const FaceCam = () => {
@@ -27,10 +27,12 @@ const FaceCam = () => {
   const [facesData, setFacesData] = useState<FaceData[] | null>(null);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [faceDetectCounter, setFaceDetectCounter] = useState(0);
+  const [noFaceDetectCounter, setNoFaceDetectCounter] = useState(0);
 
   const { data: faces, isLoading, isSuccess } = useGetAllFaces();
   const { mutateAsync: saveFaces } = useSaveFaceDescriptors();
   const { mutateAsync: addRecordAtt } = useAddRecordAttendance();
+  const { mutateAsync: recordUnknownFaces } = useRecordUnknownFaces()
 
   useEffect(() => {
     if (faces) setFacesData(faces);
@@ -107,8 +109,28 @@ const FaceCam = () => {
             setFaceDetectCounter((prevCounter) => prevCounter + 1);
 
             if (faceDetectCounter + 1 >= 3) {
-              handleAbsensi(detectedPerson.userId!, new Date());
+              handleAbsensi(detectedPerson.userId!, new Date())
+              setFaceDetectCounter(0);
             }
+          } else {
+            await handleCaptureImg()
+            handleDrawCanvas(canvas, detections, displaySize, 'Tidak dikenali')
+
+            setNoFaceDetectCounter((prevCounter) => prevCounter + 1);
+
+            if (noFaceDetectCounter + 1 >= 3) {
+              await recordUnknownFaces({
+                descriptor: detections.descriptor,
+                faceImage: imgSrc!,
+                timestamp: new Date()
+              }, {
+                onSuccess() {
+                  toast.info("Success save unknown face")
+                },
+              })
+              setNoFaceDetectCounter(0);
+            }
+
           }
         } else {
           setDetectedFace(null);
@@ -134,8 +156,8 @@ const FaceCam = () => {
     }
   };
 
-  const handleCaptureImg = () => {
-    setImgSrc(handleCapture(videoRef));
+  const handleCaptureImg = async () => {
+    setImgSrc(await handleCapture(videoRef));
   };
 
   const handleAbsensi = async (userId: string, time: Date) => {
@@ -221,7 +243,7 @@ const FaceCam = () => {
         </Button>
       </div>
 
-      {imgSrc ? <img src={imgSrc} width={200} height={200} /> : <></>}
+      {/* {imgSrc ? <img src={imgSrc} width={200} height={200} /> : <></>} */}
     </div>
   );
 };

@@ -69,6 +69,12 @@ export const formatTimeWIB = (date: Date | string | null) => {
   return date ? format(indonesianDate, "HH:mm") : "-";
 };
 
+export const formatDateTimeWIB = (date: Date | string | null) => {
+  const indonesianDate = addHours(date!, 7);
+
+  return date ? format(indonesianDate, "eeee, dd MMM yyyy, HH:mm") : "-";
+};
+
 export const formatOnlyDateWIB = (date: Date | string | null) => {
   const indonesianDate = addHours(date!, 7);
 

@@ -16,6 +16,7 @@ export enum QUERY_KEYS {
 
 
   GET_ALL_FACES = 'getAllFaces',
+  GET_ALL_UNKNOWN_FACES = 'getAllUnknownFaces',
 
   SEARCH_POSTS = 'getSearchPosts',
 
