@@ -8,7 +8,7 @@ import { UnknownFaceRecord } from "@/types"
 const UnknownFace = () => {
   const [data, setData] = useState<UnknownFaceRecord[]>([]);
 
-  const { data: allUnknownFaces, isLoading } = useGetAllUnknownFaces()
+  const { data: allUnknownFaces, isLoading } = useGetAllUnknownFaces(10)
 
   useEffect(() => {
     if (!allUnknownFaces) return

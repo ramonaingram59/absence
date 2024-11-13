@@ -47,10 +47,10 @@ export const useRecordUnknownFaces = () => {
   });
 };
 
-export const useGetAllUnknownFaces = () => {
+export const useGetAllUnknownFaces = (limit?: number) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_ALL_UNKNOWN_FACES],
-    queryFn: allUnknownFaces,
+    queryFn: () => allUnknownFaces(limit),
     refetchOnWindowFocus: false,
   });
 };

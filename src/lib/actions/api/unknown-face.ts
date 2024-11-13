@@ -38,13 +38,20 @@ export const recordUnknownFaces = async ({
 
 
 
-export const allUnknownFaces = async () => {
+export const allUnknownFaces = async (limit?: number) => {
   try {
 
-    const { data: allUnknownFaces, error } = await supabase
+    let query = supabase
       .from("UnknownFaceRecord")
       .select()
 
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    const { data: allUnknownFaces, error } = await query.order("timestamp", {
+      ascending: false,
+    });
     if (error) throw Error
 
     return allUnknownFaces
