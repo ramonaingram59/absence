@@ -8,18 +8,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDateWIB, formatTimeWIB } from "@/lib/utils";
+import { AttendanceRecord } from "@/types";
 import { Link } from "react-router-dom";
 
-const TodayCard = () => {
-  // Todo get hour from History
+interface HistoryProps {
+  history?: AttendanceRecord[];
+}
+
+
+
+const TodayCard = ({ history }: HistoryProps) => {
+  const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+  // Find today's record
+  const todayRecord = history?.find(record => record.date === today);
+
+  // Format inTime and outTime
+  const inTimeFormatted = todayRecord?.inTime ? formatTimeWIB(todayRecord.inTime) : '--:--';
+  const outTimeFormatted = todayRecord?.outTime ? formatTimeWIB(todayRecord.outTime) : '--:--';
+
 
   return (
     <div className="w-full">
       <Card>
         <CardHeader>
           <CardTitle>
-            <span className="text-xl">Today ( {formatDate(new Date())} )</span>
+            <span className="text-xl">Today ( {formatDateWIB(new Date())} )</span>
           </CardTitle>
           <CardDescription>
             Shift: Fixed 9 hours (08:30 - 17:30)
@@ -34,8 +49,7 @@ const TodayCard = () => {
               <p className="font-medium text-muted-foreground">Start Time</p>
               <div className="flex flex-row items-end gap-4">
                 <p className="text-xl font-medium">
-                  08:30
-                  {/* HEREEEE */}
+                  {inTimeFormatted}
                 </p>
                 <div className="w-6 h-6 rounded-lg bg-primary">
                   <img src="/assets/icons/face-scan.svg" />
@@ -49,8 +63,7 @@ const TodayCard = () => {
               <p className="font-medium text-muted-foreground">End Time</p>
               <div className="flex flex-row items-end gap-4">
                 <p className="text-xl font-medium">
-                  --:--
-                  {/* HEREEEE */}
+                  {outTimeFormatted}
                 </p>
                 <div className="w-6 h-6 rounded-lg bg-primary-foreground">
                   <img src="/assets/icons/face-scan.svg" />

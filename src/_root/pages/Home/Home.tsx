@@ -28,7 +28,7 @@ const Home = () => {
         </div>
       </div>
 
-      <TodayCard />
+      <TodayCard history={history} />
 
       {user && <HistoryCard user={user} history={history} />}
     </div>
