@@ -53,7 +53,7 @@ export const saveUserToDB = async (user: {
           name: user?.name,
           departement: user?.departement,
           imageUrl: user?.imageUrl,
-          role: ROLE.USER,
+          role: ROLE.ADMIN,
           password: hashedPassword,
         },
       ])
