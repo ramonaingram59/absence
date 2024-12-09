@@ -120,16 +120,21 @@ const FaceCam = () => {
             setNoFaceDetectCounter((prevCounter) => prevCounter + 1);
 
             if (noFaceDetectCounter + 1 >= 3) {
-              await recordUnknownFaces({
-                descriptor: detections.descriptor,
-                faceImage: imgSrc!,
-                timestamp: new Date()
-              }, {
-                onSuccess() {
-                  toast.info("Success save unknown face")
-                },
-              })
-              setNoFaceDetectCounter(0);
+              if (!isScanPage) {
+                return
+              } else {
+
+                await recordUnknownFaces({
+                  descriptor: detections.descriptor,
+                  faceImage: imgSrc!,
+                  timestamp: new Date()
+                }, {
+                  onSuccess() {
+                    toast.info("Success save unknown face")
+                  },
+                })
+                setNoFaceDetectCounter(0);
+              }
             }
 
           }
@@ -164,20 +169,20 @@ const FaceCam = () => {
   const handleAbsensi = async (userId: string, time: Date) => {
     if (isScanPage) {
 
-    await addRecordAtt(
-      {
-        userId,
-        time,
-      },
-      {
-        onSuccess(data) {
-          if (!data) return;
-          toast.success("Absensi dilakukan secara otomatis!");
+      await addRecordAtt(
+        {
+          userId,
+          time,
         },
-      }
-    );
+        {
+          onSuccess(data) {
+            if (!data) return;
+            toast.success("Absensi dilakukan secara otomatis!");
+          },
+        }
+      );
 
-    setFaceDetectCounter(0);
+      setFaceDetectCounter(0);
     }
   };
 
@@ -221,8 +226,8 @@ const FaceCam = () => {
         {!isScanPage && <Button
           size="lg"
           className={`p-5 text-lg rounded-lg ${isFaceSaved
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-gray-900 hover:scale-105 active:scale-95 transition transform outline outline-dark-4 outline-1"
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-gray-900 hover:scale-105 active:scale-95 transition transform outline outline-dark-4 outline-1"
             } text-white`}
           onClick={handleSaveFace}
           disabled={isFaceSaved}
