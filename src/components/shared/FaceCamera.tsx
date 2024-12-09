@@ -1,9 +1,3 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import * as faceapi from "face-api.js";
-import { Button } from "../ui/button";
-import { toast } from "sonner";
-import { FaceData } from "@/types";
-import Webcam from "react-webcam";
 import {
   checkFaceDetection,
   detectManyFace,
@@ -12,12 +6,19 @@ import {
 } from "@/lib/actions/faceRecognitionAction";
 import { useAddRecordAttendance } from "@/lib/react-query/absence/absenceQueries";
 import { useGetAllFaces, useRecordUnknownFaces, useSaveFaceDescriptors } from "@/lib/react-query/face/faceQueries";
+import { FaceData } from "@/types";
+import * as faceapi from "face-api.js";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Webcam from "react-webcam";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
 import Loader from "./Loader";
 
 const FaceCam = () => {
   const videoRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const isScanPage = location.pathname === "/scan"
 
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [detectedFace, setDetectedFace] = useState<Float32Array | null>(null);
@@ -105,7 +106,7 @@ const FaceCam = () => {
           setDetectedPerson(person)
 
           if (detectedPerson) {
-            handleDrawCanvas(canvas, detections, displaySize, detectedPerson?.name);
+            handleDrawCanvas(canvas, detections, displaySize, isScanPage ? detectedPerson?.name : 'Terdeteksi');
             setFaceDetectCounter((prevCounter) => prevCounter + 1);
 
             if (faceDetectCounter + 1 >= 3) {
@@ -161,6 +162,8 @@ const FaceCam = () => {
   };
 
   const handleAbsensi = async (userId: string, time: Date) => {
+    if (isScanPage) {
+
     await addRecordAtt(
       {
         userId,
@@ -175,6 +178,7 @@ const FaceCam = () => {
     );
 
     setFaceDetectCounter(0);
+    }
   };
 
   if (!modelsLoaded || isLoading) {
@@ -185,8 +189,8 @@ const FaceCam = () => {
     <div className="max-h-screen max-w-screen flex flex-col justify-center items-center">
       <h1>Face Recognition</h1>
       <div>
-        <p>Recognized: {detectedPerson?.name}</p>
-        <p>Counter: {faceDetectCounter}</p>
+        {isScanPage && <p>Recognized: {detectedPerson?.name}</p>}
+        {/* <p>Counter: {faceDetectCounter}</p> */}
       </div>
 
       <div className="relative justify-center items-center w-full mb-5">
@@ -214,7 +218,7 @@ const FaceCam = () => {
       </div>
 
       <div className="flex justify-center items-center mt-5 space-x-4 z-10">
-        <Button
+        {!isScanPage && <Button
           size="lg"
           className={`p-5 text-lg rounded-lg ${isFaceSaved
               ? "bg-gray-400 cursor-not-allowed"
@@ -224,9 +228,9 @@ const FaceCam = () => {
           disabled={isFaceSaved}
         >
           Save Face
-        </Button>
+        </Button>}
 
-        <Button
+        {/* <Button
           className="p-5 text-lg rounded-lg bg-gray-900 hover:scale-105 active:scale-95 transition transform text-white ml-4  outline outline-dark-4 outline-1"
           size="lg"
           onClick={handleDetectFace}
@@ -240,7 +244,7 @@ const FaceCam = () => {
           onClick={handleCaptureImg}
         >
           Capture
-        </Button>
+        </Button> */}
       </div>
 
       {/* {imgSrc ? <img src={imgSrc} width={200} height={200} /> : <></>} */}

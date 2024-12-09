@@ -1,3 +1,4 @@
+import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -14,9 +15,8 @@ import { addDays, format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
-import { DataTable } from "./DataTable/data-table";
 import { AttendanceRecord, columns } from "./DataTable/columns";
-import Loader from "@/components/shared/Loader";
+import { DataTable } from "./DataTable/data-table";
 
 // interface IHistory {
 //   id: string ;
@@ -44,7 +44,6 @@ const Explore = () => {
     isAdmin ? "" : user?.id,
     debounceDate
   );
-
   useEffect(() => {
     if (!history || !user) return;
 
@@ -66,6 +65,15 @@ const Explore = () => {
     });
   }, [user, history, debounceDate]);
 
+  // const handleExportToExcel = async () => {
+
+  //   if (!history || history.length == 0) {
+  //     toast.error('Data is empty, please select date')
+  //     return
+  //   }
+  //   await exportToExcel(history)
+  // }
+
   if (isUserLoading || isHistoryLoading) return <Loader color="lightgray" />;
   return (
     <div className="w-full">
@@ -82,7 +90,7 @@ const Explore = () => {
           /> */}
         </div>
 
-        <div className="flex justify-end w-full py-2 mt-8">
+        <div className="flex flex-row gap-2 justify-end w-full py-2 mt-8">
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -91,7 +99,6 @@ const Explore = () => {
                 className={cn(
                   "w-[300px] justify-start text-left font-normal",
                   !date && "text-muted-foreground",
-                  "ml-auto"
                 )}
               >
                 <CalendarIcon />
@@ -120,6 +127,16 @@ const Explore = () => {
               />
             </PopoverContent>
           </Popover>
+          {/* <Button
+            variant={"outline"}
+            className={cn(
+              "justify-start text-left font-normal",
+              !date && "text-muted-foreground",
+            )}
+            onClick={handleExportToExcel}
+          >
+            <ArrowDownFromLine /> Download Excel
+          </Button> */}
         </div>
 
         <DataTable columns={columns} data={data} />
