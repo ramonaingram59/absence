@@ -28,7 +28,7 @@ export const checkFaceDetection = async (
   if (!facesData || facesData.length === 0) return null;
   const THRESHOLD: number = 0.35
 
-  // Convert facesData into labeled descriptors
+  // Convert facesData into labeled descriptor
   const labeledDescriptors = facesData.map(face => {
     const savedDescriptor = new Float32Array(
       JSON.parse(face.descriptor as string)
