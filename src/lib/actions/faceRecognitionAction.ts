@@ -26,6 +26,7 @@ export const checkFaceDetection = async (
   facesData: FaceData[] | null
 ): Promise<FaceData | null> => {
   if (!facesData || facesData.length === 0) return null;
+  const THRESHOLD: number = 0.35
 
   // Convert facesData into labeled descriptors
   const labeledDescriptors = facesData.map(face => {
@@ -35,13 +36,18 @@ export const checkFaceDetection = async (
     return new faceapi.LabeledFaceDescriptors(face.userId!, [savedDescriptor]);
   });
 
-  const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors);
+  const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors, THRESHOLD);
 
   const bestMatch = faceMatcher.findBestMatch(descriptor);
 
-  const matchedFace = facesData.find(face => face.userId === bestMatch.label);
+  // Check if the distance is below the threshold
+  if (bestMatch.distance <= THRESHOLD) {
+    const matchedFace = facesData.find(face => face.userId === bestMatch.label);
+    return matchedFace || null;
+  }
 
-  return matchedFace || null;
+  // No match found within the threshold
+  return null;
 
 
   // let bestMatch: FaceData | null = null;
@@ -77,16 +83,18 @@ export const handleDrawCanvas = (
   personName: string
 ) => {
   const resizedDetections = faceapi.resizeResults(detections, displaySize);
-  const context = canvas.getContext("2d");
-  context?.clearRect(0, 0, canvas.width, canvas.height);
 
   faceapi.draw.drawDetections(canvas, resizedDetections);
 
   const { box } = resizedDetections.detection;
   const text = personName ? personName : "Tidak dikenali";
-  new faceapi.draw.DrawTextField([text], box.bottomLeft, { fontSize: 12 }).draw(
-    canvas
-  );
+  new faceapi
+    .draw
+    .DrawTextField(
+      [text],
+      box.bottomLeft,
+      { fontSize: 12 })
+    .draw(canvas);
 };
 
 export const handleCapture = async (videoRef: RefObject<Webcam>) => {

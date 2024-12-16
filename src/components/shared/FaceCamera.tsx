@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { Button } from "../ui/button";
 import Loader from "./Loader";
 
-const FaceCam = () => {
+const FaceCam = ({ userId }: { userId?: string }) => {
   const videoRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -95,64 +95,100 @@ const FaceCam = () => {
     if (video && canvas) {
       let detectionsManyFace = await detectManyFace(video);
 
-      detectionsManyFace.forEach(async (detections) => {
-        if (detections) {
-          setDetectedFace(detections.descriptor);
+      if (detectManyFace.length > 0) {
+        const context = canvas.getContext("2d");
+        context?.clearRect(0, 0, canvas.width, canvas.height);
 
-          const person = await checkFaceDetection(
-            detections.descriptor,
-            facesData
-          );
-          setDetectedPerson(person)
+        // detectionsManyFace.forEach(async (detections) => {
+        for (const detections of detectionsManyFace) {
+          if (detections) {
+            setDetectedFace(detections.descriptor);
 
-          if (detectedPerson) {
-            handleDrawCanvas(canvas, detections, displaySize, isScanPage ? detectedPerson?.name : 'Terdeteksi');
-            setFaceDetectCounter((prevCounter) => prevCounter + 1);
+            const person = await checkFaceDetection(
+              detections.descriptor,
+              facesData
+            );
+            setDetectedPerson(person)
 
-            if (faceDetectCounter + 1 >= 3) {
-              handleAbsensi(detectedPerson.userId!, new Date())
-              setFaceDetectCounter(0);
+            const personName = person ? person.name : 'Tidak dikenali'
+
+            handleDrawCanvas(
+              canvas,
+              detections,
+              displaySize,
+              // isScanPage ? personName : 'Terdeteksi'
+              personName
+            );
+
+            if (person) {
+              setFaceDetectCounter((prevCounter) => prevCounter + 1);
+
+              if (faceDetectCounter + 1 >= 3) {
+                handleAbsensi(person.userId!, new Date())
+                setFaceDetectCounter(0);
+              }
+            } else {
+              await handleCaptureImg()
+              setNoFaceDetectCounter((prevCounter) => prevCounter + 1);
+
+              // handleDrawCanvas(
+              //   canvas,
+              //   detections,
+              //   displaySize,
+              //   'Tidak dikenali'
+              // )
+
+
+              if (noFaceDetectCounter + 1 >= 3) {
+                if (!isScanPage) {
+                  return;
+                } else {
+
+                  await recordUnknownFaces({
+                    descriptor: detections.descriptor,
+                    faceImage: imgSrc!,
+                    timestamp: new Date()
+                  }, {
+                    onSuccess() {
+                      toast.info("Success save unknown face")
+                    },
+                  })
+                  setNoFaceDetectCounter(0);
+                }
+              }
+
             }
           } else {
-            await handleCaptureImg()
-            handleDrawCanvas(canvas, detections, displaySize, 'Tidak dikenali')
-
-            setNoFaceDetectCounter((prevCounter) => prevCounter + 1);
-
-            if (noFaceDetectCounter + 1 >= 3) {
-              if (!isScanPage) {
-                return
-              } else {
-
-                await recordUnknownFaces({
-                  descriptor: detections.descriptor,
-                  faceImage: imgSrc!,
-                  timestamp: new Date()
-                }, {
-                  onSuccess() {
-                    toast.info("Success save unknown face")
-                  },
-                })
-                setNoFaceDetectCounter(0);
-              }
-            }
-
+            setDetectedFace(null);
+            setFaceDetectCounter(0);
+            toast("No face detected. Please face the camera.");
           }
-        } else {
-          setDetectedFace(null);
-          setFaceDetectCounter(0);
-          toast("No face detected. Please face the camera.");
         }
-      });
+      } else {
+        toast("No face detected. Please face the camera.");
+      }
     }
 
     setIsDetecting(false);
-  }, [detectedFace]);
+  }, [detectedFace,
+    detectedPerson,
+    faceDetectCounter,
+    facesData,
+    isDetecting,
+    isScanPage,
+    noFaceDetectCounter
+  ]);
 
   const handleSaveFace = async () => {
+    console.log({ userId })
+    if (!userId) {
+      toast.error("Please select employee to save the face");
+      return
+    }
+
     if (detectedFace && !isFaceSaved) {
       await saveFaces({
-        userId: detectedPerson?.userId!,
+        userId: userId,
         descriptor: detectedFace
       });
       setIsFaceSaved(true);

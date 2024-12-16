@@ -38,7 +38,7 @@ const RegisterFace = () => {
       userId: '',
     },
   });
-  const { handleSubmit, control, reset } = form;
+  const { handleSubmit, control, reset, watch } = form;
 
   useEffect(() => {
 
@@ -240,7 +240,47 @@ const RegisterFace = () => {
         </TabsContent>
         <TabsContent value="scan">
           <Suspense fallback={<Loader color="lightgray" />}>
-            <FaceCamera />
+            <Form {...form}>
+              <form
+                onSubmit={handleSubmit(onSubmit, onErr)}
+              >
+                <FormField
+                  control={control}
+                  name="userId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nama Karyawan</FormLabel>
+                      <Select onValueChange={field.onChange}
+                        defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue
+                              placeholder="Pilih karyawan"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {
+                            allUsers?.map((item, index) => (
+                              <SelectItem
+                                value={item.id}
+                                key={index}
+                                className="capitalize"
+                              >
+                                {item.name}
+                              </SelectItem>
+                            ))
+                          }
+                        </SelectContent>
+                      </Select>
+                      <FormDescription className="text-xs">Pilih karyawan untuk disimpan wajahnya ke dalam sistem.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+            <FaceCamera userId={watch("userId")} />
           </Suspense>
         </TabsContent>
       </Tabs>
