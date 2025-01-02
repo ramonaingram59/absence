@@ -1,4 +1,5 @@
 import {
+  Column,
   ColumnDef,
   ColumnFiltersState,
   flexRender,
@@ -24,7 +25,8 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -76,6 +78,13 @@ export function DataTable<TData, TValue>({
                         header.column.columnDef.header,
                         header.getContext()
                       )}
+
+                    {header.column.getCanFilter() ? (
+                      <div>
+                        <Filter column={header.column} />
+                      </div>
+                    ) : null}
+
                   </TableHead>
                 );
               })}
@@ -117,7 +126,7 @@ export function DataTable<TData, TValue>({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {[10, 20, 30, 40, 50].map((pageSize: any) => (
+            {[10, 20, 50, 100].map((pageSize: any) => (
               <SelectItem key={pageSize} value={pageSize}>
                 Show {pageSize}
               </SelectItem>
@@ -152,4 +161,53 @@ export function DataTable<TData, TValue>({
       </div>
     </>
   );
+}
+
+
+
+function Filter({ column }: { column: Column<any, unknown> }) {
+  const columnFilterValue = column.getFilterValue()
+  const { filterVariant } = column.columnDef.meta ?? {}
+
+  return filterVariant === 'search' ? (
+    <DebouncedInput
+      className="h-6 text-xs placeholder:text-xs placeholder:font-normal"
+      onChange={value => column.setFilterValue(value)}
+      placeholder={`Search...`}
+      type="text"
+      value={(columnFilterValue ?? '') as string}
+    />
+  ) : (
+    <></>
+  )
+}
+
+// A typical debounced input react component
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+  const [value, setValue] = useState(initialValue)
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [value])
+
+  return (
+    <Input {...props} value={value} onChange={e => setValue(e.target.value)} />
+  )
 }

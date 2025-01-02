@@ -1,5 +1,15 @@
-import { formatDate, formatTimeWIB } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/react-table";
+import { formatTimeWIB } from "@/lib/utils";
+import { ColumnDef, RowData } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+
+
+declare module "@tanstack/react-table" {
+  //allows us to define custom properties for our columns
+  interface ColumnMeta<TData extends RowData, TValue> {
+    filterVariant?: "none" | "search";
+  }
+}
 
 export type AttendanceRecord = {
   id: string;
@@ -43,7 +53,7 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
       return (
         <div className="">
           {/* {date.slice(0, 10)} {`${date.slice(11, 13)}:${date.slice(14, 16)}`} */}
-          {formatDate(date)}
+          {format(date, "eeee, dd MMM yyyy", { locale: id })}
         </div>
       );
     },
@@ -55,6 +65,9 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
       const user: string = row.getValue("fullName");
       return <div className="capitalize">{user}</div>;
     },
+    meta: {
+      filterVariant: "search"
+    }
   },
   {
     accessorKey: "inTime",

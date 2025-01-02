@@ -12,11 +12,13 @@ import { useGetHistoryRecord } from "@/lib/react-query/absence/absenceQueries";
 import { cn } from "@/lib/utils";
 import { ROLE } from "@/types";
 import { addDays, format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { ArrowDownFromLine, CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { AttendanceRecord, columns } from "./DataTable/columns";
 import { DataTable } from "./DataTable/data-table";
+import { toast } from "sonner";
+import { exportToExcel } from "@/lib/excel/create-excel";
 
 // interface IHistory {
 //   id: string ;
@@ -65,14 +67,14 @@ const Explore = () => {
     });
   }, [user, history, debounceDate]);
 
-  // const handleExportToExcel = async () => {
+  const handleExportToExcel = async () => {
 
-  //   if (!history || history.length == 0) {
-  //     toast.error('Data is empty, please select date')
-  //     return
-  //   }
-  //   await exportToExcel(history)
-  // }
+    if (!history || history.length == 0) {
+      toast.error('Data is empty, please select date')
+      return
+    }
+    await exportToExcel(history)
+  }
 
   if (isUserLoading || isHistoryLoading) return <Loader color="lightgray" />;
   return (
@@ -127,7 +129,7 @@ const Explore = () => {
               />
             </PopoverContent>
           </Popover>
-          {/* <Button
+          <Button
             variant={"outline"}
             className={cn(
               "justify-start text-left font-normal",
@@ -136,7 +138,7 @@ const Explore = () => {
             onClick={handleExportToExcel}
           >
             <ArrowDownFromLine /> Download Excel
-          </Button> */}
+          </Button>
         </div>
 
         <DataTable columns={columns} data={data} />
