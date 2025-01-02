@@ -111,15 +111,23 @@ const FaceCam = ({ userId }: { userId?: string }) => {
             setDetectedPerson(person)
 
             const personName = person ? person.name : 'Tidak dikenali'
-
-            handleDrawCanvas(
-              canvas,
-              detections,
-              displaySize,
-              // isScanPage ? personName : 'Terdeteksi'
-              personName
-            );
-
+            if (isScanPage) {
+              handleDrawCanvas(
+                canvas,
+                detections,
+                displaySize,
+                // isScanPage ? personName : 'Terdeteksi'
+                personName
+              )
+            } else {
+              handleDrawCanvas(
+                canvas,
+                detections,
+                displaySize,
+                'Terdeteksi'
+                // personName
+              )
+            }
             if (person) {
               setFaceDetectCounter((prevCounter) => prevCounter + 1);
 
