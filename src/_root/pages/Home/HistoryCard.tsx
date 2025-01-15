@@ -61,6 +61,15 @@ const HistoryCard = ({ user, history }: HistoryProps) => {
           </div>
         ))}
 
+        {
+          history?.length == 0 &&
+          <CardContent className="py-12">
+            <div className="flex flex-row w-full text-muted-foreground text-xs justify-center gap-4">
+              Kamu belum melakukan absensi
+            </div>
+          </CardContent>
+        }
+
         <CardFooter className="flex items-center justify-center w-full py-4">
           <Link
             to={"/history"}

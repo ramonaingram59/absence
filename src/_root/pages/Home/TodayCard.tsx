@@ -8,8 +8,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useUserContext } from "@/context/AuthContext";
 import { cn, formatDateWIB, formatTimeWIB } from "@/lib/utils";
-import { AttendanceRecord } from "@/types";
+import { AttendanceRecord, ROLE } from "@/types";
 import { Link } from "react-router-dom";
 
 interface HistoryProps {
@@ -20,6 +21,8 @@ interface HistoryProps {
 
 const TodayCard = ({ history }: HistoryProps) => {
   const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+  const { user } = useUserContext();
+
 
   // Find today's record
   const todayRecord = history?.find(record => record.date === today);
@@ -34,9 +37,9 @@ const TodayCard = ({ history }: HistoryProps) => {
       <Card>
         <CardHeader>
           <CardTitle>
-            <span className="text-xl">Today ( {formatDateWIB(new Date())} )</span>
+            <span className="text-lg text-muted-foreground">Today ( {formatDateWIB(new Date())} )</span>
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="font-semibold text-xl text-black">
             Shift: Fixed 9 hours (08:30 - 17:30)
           </CardDescription>
         </CardHeader>
@@ -75,11 +78,11 @@ const TodayCard = ({ history }: HistoryProps) => {
 
         <Separator orientation="horizontal" />
 
-        <CardFooter className="flex items-center justify-center w-full py-4">
+        {user.role == ROLE.ADMIN && <CardFooter className="flex items-center justify-center w-full py-4">
           <Link to={"/scan"} className={cn(buttonVariants(), "w-full")}>
             Record Time
           </Link>
-        </CardFooter>
+        </CardFooter>}
       </Card>
     </div>
   );

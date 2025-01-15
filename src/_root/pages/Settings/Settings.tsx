@@ -23,7 +23,7 @@ const Settings = () => {
         Settings
       </h2>
       <Card>
-        <Link
+        {user.role == ROLE.ADMIN && <Link
           to={"/settings/faces"}
           className={cn(buttonVariants({ variant: "outline" }), "w-full flex justify-between items-center min-h-32")}>
           <div className="flex flex-col pl-2">
@@ -39,7 +39,7 @@ const Settings = () => {
             </div>
           </div>
           <ChevronRight size={"32"} color="gray" />
-        </Link>
+        </Link>}
 
         <Link
           to={user.role !== ROLE.ADMIN ? `/profile/${user.id}` : `/settings/users`}
@@ -53,15 +53,22 @@ const Settings = () => {
               </div>
             </div>
             <div>
-              <span className="text-muted-foreground text-xs">
-                Ubah atau hapus informasi karyawan.
-              </span>
+              {user.role !== ROLE.ADMIN
+                ?
+                <span className="text-muted-foreground text-xs">
+                  Ubah profile.
+                </span>
+                :
+                <span className="text-muted-foreground text-xs">
+                  Ubah atau hapus informasi karyawan.
+                </span>
+              }
             </div>
           </div>
           <ChevronRight size={"32"} color="gray" />
         </Link>
 
-        <Link
+        {user.role == ROLE.ADMIN && <Link
           to={"/settings/unknown-faces"}
           className={cn(buttonVariants({ variant: "outline" }), "w-full flex justify-between items-center min-h-32")}>
           <div className="flex flex-col pl-2">
@@ -79,7 +86,7 @@ const Settings = () => {
             </div>
           </div>
           <ChevronRight size={"32"} color="gray" />
-        </Link>
+        </Link>}
 
       </Card>
     </div>

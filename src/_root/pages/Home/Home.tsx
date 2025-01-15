@@ -20,7 +20,10 @@ const Home = () => {
       <div className="w-full py-4">
         <h2 className="font-semibold text-left">Hello,</h2>
         <div>
-          <h2 className="text-xl italic font-semibold">{user?.name}</h2>
+          <div className="flex flex-row gap-4 items-center">
+            <h2 className="text-xl italic font-semibold">{user?.name} </h2>
+            <div className="text-sm italic capitalize shadow-sm text-white bg-green-800 rounded-md px-2">{user?.role}</div>
+          </div>
           <h3 className="text-sm not-italic font-normal capitalize text-muted-foreground">
             {user?.position ? user?.position + " - " : ""} {user?.departement}{" "}
             department

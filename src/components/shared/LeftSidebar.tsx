@@ -43,9 +43,10 @@ const LeftSidebar = () => {
             className='h-10 w-10 rounded-full'
           />
           <div className='flex flex-col'>
-            <p className='font-bold leading-[140%] max-w-52 line-clamp-1'>
-              {user?.name}
-            </p>
+            <div className="flex flex-row gap-2 items-center">
+              <h2 className="text-lg italic font-semibold leading-[140%] line-clamp-1 max-w-48 capitalize">{user?.name}</h2>
+              <div className="text-xs italic capitalize shadow-sm text-white bg-green-800 rounded-md px-2">{user?.role}</div>
+            </div>
 
             <p className='font-normal leading-[140%] text-muted-foreground capitalize'>
               {user?.departement} department
