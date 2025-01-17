@@ -12,13 +12,11 @@ import { useGetHistoryRecord } from "@/lib/react-query/absence/absenceQueries";
 import { cn } from "@/lib/utils";
 import { ROLE } from "@/types";
 import { addDays, format } from "date-fns";
-import { ArrowDownFromLine, CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { AttendanceRecord, columns } from "./DataTable/columns";
 import { DataTable } from "./DataTable/data-table";
-import { toast } from "sonner";
-import { exportToExcel } from "@/lib/excel/create-excel";
 
 // interface IHistory {
 //   id: string ;
@@ -67,14 +65,14 @@ const Explore = () => {
     });
   }, [user, history, debounceDate]);
 
-  const handleExportToExcel = async () => {
+  // const handleExportToExcel = async () => {
 
-    if (!history || history.length == 0) {
-      toast.error('Data is empty, please select date')
-      return
-    }
-    await exportToExcel(history)
-  }
+  //   if (!history || history.length == 0) {
+  //     toast.error('Data is empty, please select date')
+  //     return
+  //   }
+  //   await exportToExcel(history)
+  // }
 
   if (isUserLoading || isHistoryLoading) return <Loader color="lightgray" />;
   return (
