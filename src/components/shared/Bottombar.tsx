@@ -12,7 +12,7 @@ const Bottombar = () => {
     <section className='fixed z-50 flex justify-between items-center w-full bottom-0 rounded-t-[20px] px-5 py-4 md:hidden bg-green-700 text-white'>
       {BOTTOMBAR_LINKS.map((link: INavLink) => {
         let isActive = pathname === link.route
-        const isAllow = user.role === ROLE.ADMIN || link.role === user.role;
+        const isAllow = user.role !== ROLE.USER || link.role === user.role;
 
         return (<NavLink
           to={link.route}

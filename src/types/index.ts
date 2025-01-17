@@ -64,6 +64,7 @@ export type UnknownFaceRecord =
 export enum ROLE {
   ADMIN = "admin",
   USER = "user",
+  SUPERVISOR = "supervisor"
 }
 
 export enum STATUS {

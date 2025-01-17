@@ -57,7 +57,7 @@ const LeftSidebar = () => {
         <ul className='flex flex-col gap-1'>
           {SIDEBAR_LINKS.map((link: INavLink) => {
             let isActive = pathname === link.route
-            const isAllow = user.role === ROLE.ADMIN || link.role === user.role;
+            const isAllow = user.role !== ROLE.USER || link.role === user.role;
 
             return (
               <li

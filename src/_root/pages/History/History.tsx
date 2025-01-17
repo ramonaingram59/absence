@@ -40,7 +40,7 @@ const Explore = () => {
 
   const { user, isLoading: isUserLoading } = useUserContext();
 
-  const isAdmin = user?.role === ROLE.ADMIN;
+  const isAdmin = user?.role !== ROLE.USER;
 
   const { data: history, isPending: isHistoryLoading } = useGetHistoryRecord(
     isAdmin ? "" : user?.id,

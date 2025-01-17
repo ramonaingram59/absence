@@ -78,7 +78,7 @@ const TodayCard = ({ history }: HistoryProps) => {
 
         <Separator orientation="horizontal" />
 
-        {user.role == ROLE.ADMIN && <CardFooter className="flex items-center justify-center w-full py-4">
+        {user.role !== ROLE.USER && <CardFooter className="flex items-center justify-center w-full py-4">
           <Link to={"/scan"} className={cn(buttonVariants(), "w-full")}>
             Record Time
           </Link>

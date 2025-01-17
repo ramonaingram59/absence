@@ -23,7 +23,7 @@ const Settings = () => {
         Settings
       </h2>
       <Card>
-        {user.role == ROLE.ADMIN && <Link
+        {user.role !== ROLE.USER && <Link
           to={"/settings/faces"}
           className={cn(buttonVariants({ variant: "outline" }), "w-full flex justify-between items-center min-h-32")}>
           <div className="flex flex-col pl-2">
@@ -42,7 +42,7 @@ const Settings = () => {
         </Link>}
 
         <Link
-          to={user.role !== ROLE.ADMIN ? `/profile/${user.id}` : `/settings/users`}
+          to={user.role === ROLE.USER ? `/profile/${user.id}` : `/settings/users`}
           className={cn(buttonVariants({ variant: "outline" }), "w-full flex justify-between items-center min-h-32")}>
           <div className="flex flex-col pl-2">
             <div className="flex flex-row items-center justify-between">
@@ -53,7 +53,7 @@ const Settings = () => {
               </div>
             </div>
             <div>
-              {user.role !== ROLE.ADMIN
+              {user.role === ROLE.USER
                 ?
                 <span className="text-muted-foreground text-xs">
                   Ubah profile.
@@ -68,7 +68,7 @@ const Settings = () => {
           <ChevronRight size={"32"} color="gray" />
         </Link>
 
-        {user.role == ROLE.ADMIN && <Link
+        {user.role !== ROLE.USER && <Link
           to={"/settings/unknown-faces"}
           className={cn(buttonVariants({ variant: "outline" }), "w-full flex justify-between items-center min-h-32")}>
           <div className="flex flex-col pl-2">

@@ -42,7 +42,7 @@ const RegisterFace = () => {
 
   useEffect(() => {
 
-    if (!isUserLoading && user && user.role !== ROLE.ADMIN) {
+    if (!isUserLoading && user && user.role === ROLE.USER) {
       toast.error('You are not an Admin, please contact your administrator.')
       navigate('/');
     }

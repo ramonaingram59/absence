@@ -43,7 +43,7 @@ const Profile = () => {
 
   useEffect(() => {
 
-    if ((user.role !== ROLE.ADMIN) && (id !== user.id)) {
+    if ((user.role === ROLE.USER) && (id !== user.id)) {
       toast.error('You are not an Admin, please contact your administrator.')
       navigate('/');
       return
@@ -248,7 +248,7 @@ const Profile = () => {
               </FormItem>
             )}
           />
-          {user && user?.role !== ROLE.ADMIN
+          {user && user?.role === ROLE.USER
             ? <></>
             :
             <FormField
@@ -273,6 +273,9 @@ const Profile = () => {
                       </SelectItem>
                       <SelectItem value={ROLE.USER} className="capitalize">
                         {ROLE.USER}
+                      </SelectItem>
+                      <SelectItem value={ROLE.SUPERVISOR} className="capitalize">
+                        {ROLE.SUPERVISOR}
                       </SelectItem>
                     </SelectContent>
                   </Select>

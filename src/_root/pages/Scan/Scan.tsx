@@ -15,7 +15,7 @@ const Saved = () => {
 
   useEffect(() => {
 
-    if (!isUserLoading && user && user.role !== ROLE.ADMIN) {
+    if (!isUserLoading && user && user.role === ROLE.USER) {
       toast.error('You are not an Admin, please contact your administrator.')
       navigate('/');
       return
@@ -30,7 +30,7 @@ const Saved = () => {
   return (
     <div>
       {
-        user && user.role !== ROLE.ADMIN
+        user && user.role === ROLE.USER
           ?
           <></>
           :
