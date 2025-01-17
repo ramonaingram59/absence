@@ -129,7 +129,7 @@ const Explore = () => {
               />
             </PopoverContent>
           </Popover>
-          <Button
+          {/* <Button
             variant={"outline"}
             className={cn(
               "justify-start text-left font-normal",
@@ -138,7 +138,7 @@ const Explore = () => {
             onClick={handleExportToExcel}
           >
             <ArrowDownFromLine /> Download Excel
-          </Button>
+          </Button> */}
         </div>
 
         <DataTable columns={columns} data={data} />

@@ -65,9 +65,9 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
       const user: string = row.getValue("fullName");
       return <div className="capitalize">{user}</div>;
     },
-    meta: {
-      filterVariant: "search"
-    }
+    // meta: {
+    //   filterVariant: "search"
+    // }
   },
   {
     accessorKey: "inTime",
