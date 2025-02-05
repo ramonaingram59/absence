@@ -3,9 +3,11 @@ import { supabase } from "../../supabase/connect";
 export const recordUnknownFaces = async ({
   descriptor,
   faceImage,
-  timestamp
+  timestamp,
+  notes
 }: {
   faceImage: string,
+    notes: string,
   timestamp: Date,
   descriptor: Float32Array
 }) => {
@@ -19,7 +21,7 @@ export const recordUnknownFaces = async ({
         {
           faceDescriptor: jsonDescriptor,
           faceImage: faceImage,
-          notes: '',
+          notes: notes,
           timestamp: timestamp.toUTCString()
         },
       ])

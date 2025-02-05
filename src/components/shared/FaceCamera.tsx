@@ -78,6 +78,39 @@ const FaceCam = ({ userId }: { userId?: string }) => {
     return () => clearInterval(intervalId);
   }, [modelsLoaded, isDetecting]);
 
+  const createNotes = (detectionResults: { person: FaceData | null, name: string }[]) => {
+    const recognizedFaces = detectionResults.filter(result => result.person !== null);
+    const unrecognizedCount = detectionResults.length - recognizedFaces.length;
+
+    if (detectionResults.length === 1) {
+      return "Wajah tidak dikenali";
+    }
+
+    let notes = "";
+
+    // Add recognized faces
+    recognizedFaces.forEach((face, index) => {
+      if (index === 0) {
+        notes += `Wajah dikenali (${face.name})`;
+      } else if (index === recognizedFaces.length - 1 && unrecognizedCount === 0) {
+        notes += `, dan ${face.name}`;
+      } else {
+        notes += `, ${face.name}`;
+      }
+    });
+
+    // Add unrecognized faces if any
+    if (unrecognizedCount > 0) {
+      if (recognizedFaces.length > 0) {
+        notes += ", dan wajah tidak dikenali";
+      } else {
+        notes = "Wajah tidak dikenali";
+      }
+    }
+
+    return notes;
+  };
+
   const handleDetectFace = useCallback(async () => {
     console.log("Detecting face");
     if (!videoRef.current || !canvasRef.current || isDetecting) return;
@@ -99,6 +132,8 @@ const FaceCam = ({ userId }: { userId?: string }) => {
         const context = canvas.getContext("2d");
         context?.clearRect(0, 0, canvas.width, canvas.height);
 
+        const detectionResults = [];
+
         // detectionsManyFace.forEach(async (detections) => {
         for (const detections of detectionsManyFace) {
           if (detections) {
@@ -111,6 +146,8 @@ const FaceCam = ({ userId }: { userId?: string }) => {
             setDetectedPerson(person)
 
             const personName = person ? person.name : 'Tidak dikenali'
+            detectionResults.push({ person, name: personName });
+
             if (isScanPage) {
               handleDrawCanvas(
                 canvas,
@@ -146,16 +183,16 @@ const FaceCam = ({ userId }: { userId?: string }) => {
               //   'Tidak dikenali'
               // )
 
+              const notes = createNotes(detectionResults);
 
               if (noFaceDetectCounter + 1 >= 3) {
-                if (!isScanPage) {
-                  return;
-                } else {
-
+                if (isScanPage) {
                   await recordUnknownFaces({
                     descriptor: detections.descriptor,
                     faceImage: imgSrc!,
-                    timestamp: new Date()
+                    timestamp: new Date(),
+                    // notes: notes,
+                    notes: ''
                   }, {
                     onSuccess() {
                       toast.info("Success save unknown face")
@@ -207,7 +244,7 @@ const FaceCam = ({ userId }: { userId?: string }) => {
   };
 
   const handleCaptureImg = async () => {
-    setImgSrc(await handleCapture(videoRef));
+    setImgSrc(await handleCapture(videoRef, canvasRef));
   };
 
   const handleAbsensi = async (userId: string, time: Date) => {

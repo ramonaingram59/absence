@@ -46,7 +46,7 @@ const Explore = () => {
   );
   useEffect(() => {
     if (!history || !user) return;
-
+    console.log({ user })
     const transformedData: AttendanceRecord[] = history.map((item) => ({
       id: item.id,
       userId: item.userId,
@@ -55,6 +55,7 @@ const Explore = () => {
       outTime: item.outTime,
       status: item.status,
       fullName: item.Users?.name ?? '',
+      department: item.Users?.departement
     }));
 
     setData((prevData) => {

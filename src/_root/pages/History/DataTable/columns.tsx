@@ -19,6 +19,7 @@ export type AttendanceRecord = {
   status: string | null;
   userId: string;
   fullName: string;
+  department: string;
 };
 
 // interface Props {
@@ -63,6 +64,17 @@ export const columns: ColumnDef<AttendanceRecord>[] = [
     header: () => <div className="">Full Name</div>,
     cell: ({ row }) => {
       const user: string = row.getValue("fullName");
+      return <div className="capitalize">{user}</div>;
+    },
+    // meta: {
+    //   filterVariant: "search"
+    // }
+  },
+  {
+    accessorKey: "department",
+    header: () => <div className="">Department</div>,
+    cell: ({ row }) => {
+      const user: string = row.getValue("department");
       return <div className="capitalize">{user}</div>;
     },
     // meta: {

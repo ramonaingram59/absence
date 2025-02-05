@@ -29,15 +29,18 @@ export const useRecordUnknownFaces = () => {
     mutationFn: ({
       descriptor,
       faceImage,
-      timestamp
+      timestamp,
+      notes
     }: {
       faceImage: string,
+        notes: string,
       timestamp: Date,
       descriptor: Float32Array
     }) => recordUnknownFaces({
       descriptor,
       faceImage,
-      timestamp
+      timestamp,
+      notes
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({

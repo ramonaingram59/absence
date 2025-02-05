@@ -97,8 +97,43 @@ export const handleDrawCanvas = (
     .draw(canvas);
 };
 
-export const handleCapture = async (videoRef: RefObject<Webcam>) => {
-  let imageBlob = await videoRef?.current?.getScreenshot() ?? null;
+export const handleCapture = async (
+  videoRef: RefObject<Webcam>,
+  canvasRef: RefObject<HTMLCanvasElement>
+) => {
+  // Get the base image from webcam
+  const imageBlob = videoRef?.current?.getScreenshot() ?? null;
+
+  // If we have both canvas and image
+  if (canvasRef.current && imageBlob) {
+    // Create a temporary canvas to combine both images
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+
+    // Create temporary image to load the webcam shot
+    const img = new Image();
+
+    // Wait for image to load
+    await new Promise((resolve) => {
+      img.onload = resolve;
+      img.src = imageBlob;
+    });
+
+    // Set canvas size to match image
+    tempCanvas.width = img.width;
+    tempCanvas.height = img.height;
+
+    // Draw the webcam image first
+    tempCtx?.drawImage(img, 0, 0);
+
+    // Draw the detection canvas (with face boxes) on top
+    tempCtx?.drawImage(canvasRef.current, 0, 0);
+
+    // Convert the combined canvas to base64 image
+    const combinedImage = tempCanvas.toDataURL('image/jpeg');
+
+    return combinedImage;
+  }
 
   return imageBlob;
 };
