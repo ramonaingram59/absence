@@ -55,7 +55,7 @@ const Explore = () => {
       outTime: item.outTime,
       status: item.status,
       fullName: item.Users?.name ?? '',
-      department: item.Users?.departement
+      department: item.Users?.departement ?? ''
     }));
 
     setData((prevData) => {

@@ -184,7 +184,7 @@ const FaceCam = ({ userId }: { userId?: string }) => {
               // )
 
               const notes = createNotes(detectionResults);
-
+              console.log(notes)
               if (noFaceDetectCounter + 1 >= 3) {
                 if (isScanPage) {
                   await recordUnknownFaces({
