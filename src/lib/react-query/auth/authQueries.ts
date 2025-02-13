@@ -1,6 +1,7 @@
 import { INewUser } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  createMahasiswa,
   createUserAccount,
   deleteUserById,
   getAllDepartments,
@@ -13,9 +14,20 @@ import {
 } from "../../actions/api/auth";
 import { QUERY_KEYS } from "../queryKey";
 
+export type Mahasiswa = {
+  nama: string
+  nim: string
+}
+
 export const useCreateUserAccount = () => {
   return useMutation({
     mutationFn: (user: INewUser) => createUserAccount(user),
+  });
+};
+
+export const useAddMahasiswa = () => {
+  return useMutation({
+    mutationFn: (user: Mahasiswa) => createMahasiswa(user),
   });
 };
 

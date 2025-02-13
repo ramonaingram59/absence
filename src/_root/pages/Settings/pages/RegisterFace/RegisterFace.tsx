@@ -118,7 +118,7 @@ const RegisterFace = () => {
 
       faceapi.matchDimensions(canvas, displaySize);
 
-      handleDrawCanvas(canvas, detections, displaySize, 'Wajah terdeteksi')
+      handleDrawCanvas(canvas, detections, displaySize, 'Terdeteksi')
 
     }
 

@@ -134,7 +134,6 @@ const FaceCam = ({ userId }: { userId?: string }) => {
 
         const detectionResults = [];
 
-        // detectionsManyFace.forEach(async (detections) => {
         for (const detections of detectionsManyFace) {
           if (detections) {
             setDetectedFace(detections.descriptor);
@@ -289,7 +288,7 @@ const FaceCam = ({ userId }: { userId?: string }) => {
           height={320}
           className="w-full h-auto max-w-full aspect-ratio-[3/4] md:max-w-lg md:h-auto rounded"
           videoConstraints={{
-            facingMode: "user",
+            facingMode: "environment",
             aspectRatio: 3 / 4,
             // width: 240,
             // height: 320

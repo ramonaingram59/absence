@@ -2,6 +2,32 @@ import { INewUser, ROLE, User } from "@/types";
 import { avatars } from "../../config";
 import { supabase } from "../../supabase/connect";
 import { bcryptComparePassword, bcryptPasswordHash } from "../../utils";
+import { Mahasiswa } from "@/lib/react-query/auth/authQueries";
+
+export const createMahasiswa = async (user: Mahasiswa) => {
+  try {
+    const { data: newUser, error } = await supabase
+      .from("Mahasiswa")
+      .insert([
+        {
+          nama: user?.nama,
+          nim: user?.nim
+        },
+      ])
+      .select();
+
+    if (error) {
+      console.error("Error saving user to DB:", error);
+      return;
+    }
+
+    return newUser;
+
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
 
 export const createUserAccount = async (user: INewUser) => {
   try {

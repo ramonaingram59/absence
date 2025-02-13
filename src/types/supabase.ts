@@ -122,6 +122,27 @@ export type Database = {
           },
         ]
       }
+      Mahasiswa: {
+        Row: {
+          created_at: string
+          id: number
+          nama: string | null
+          nim: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          nama?: string | null
+          nim?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          nama?: string | null
+          nim?: string | null
+        }
+        Relationships: []
+      }
       RoomEntryRecord: {
         Row: {
           capturedAt: string | null

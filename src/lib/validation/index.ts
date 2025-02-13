@@ -35,3 +35,8 @@ export const ProfileValidation = z.object({
   status: z.string({ message: 'Status is required.' }).min(3, { message: 'Status must be at least 2 characters' }),
   role: z.string().min(3, { message: 'Role must be at least 2 characters' }),
 })
+
+export const MahasiswaValidation = z.object({
+  name: z.string().min(3, { message: 'Name must be at least 2 characters' }),
+  NIM: z.string().min(3, { message: 'NIM must be at least 2 characters' }),
+})
